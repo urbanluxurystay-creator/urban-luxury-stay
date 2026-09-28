@@ -219,9 +219,6 @@ v4t:['Plus vous séjournez, plus vous gagnez : bons d’achat et nuits offertes.
 lt_title:['10 points, une nuit offerte','10 points, one free night','10 نقاط، ليلة مجانية'],
 lt_text:['Chaque nuit passée chez nous vous rapproche d’une récompense : bons d’achat, avantages et nuits offertes.','Every night with us brings you closer to a reward: vouchers, perks and free nights.','كل ليلة تقضيها عندنا تقرّبك من مكافأة: قسائم ومزايا وليالٍ مجانية.'],
 lt_cta:['Découvrir le programme','Discover the programme','اكتشف البرنامج'],
-gt_title:['Casablanca, vue de l’intérieur','Casablanca, from the inside','الدار البيضاء من الداخل'],
-gt_text:['Restaurants, cafés, rooftops, musées : nos adresses pour vivre la ville comme un local.','Restaurants, cafés, rooftops, museums: our addresses to live the city like a local.','مطاعم، مقاهٍ، أسطح بانورامية ومتاحف: عناويننا لتعيش المدينة كأهلها.'],
-gt_cta:['Explorer le guide','Explore the guide','استكشف الدليل'],
 ap_title:['Studios et villas','Studios and villas','استوديوهات وفيلات'],
 ap_sub:['Choisissez votre adresse à Casablanca.','Choose your address in Casablanca.','اختر عنوانك في الدار البيضاء.'],
 f_all:['Tous','All','الكل'],f_apartment:['Studios','Studios','استوديوهات'],f_villa:['Villas','Villas','فيلات'],
@@ -617,7 +614,7 @@ function homeView(){
   '<section class="sec light"><div class="wrap"><div class="rule"></div><h2 class="title" style="max-width:16ch">'+t('val_title')+'</h2><div class="vals">'+
     [1,2,3,4].map(i=>'<div class="val"><h3>'+t('v'+i)+'</h3><p>'+t('v'+i+'t')+'</p></div>').join('')+'</div></div></section>'+
   '<section class="sec dark"><div class="wrap"><div class="band"><div><div class="mega">10</div><h2 class="title">'+t('lt_title')+'</h2><p class="lead">'+t('lt_text')+'</p><p style="margin-top:34px"><a class="btn solid" href="#/loyalty">'+t('lt_cta')+'</a></p></div><div class="arch">'+blockPic('loyalty',0,21)+'</div></div></div></section>'+
-  '<section class="sec light"><div class="wrap"><div class="band"><div class="arch" style="order:2">'+blockPic('guide',3,9)+'</div><div><div class="rule"></div><h2 class="title">'+t('gt_title')+'</h2><p class="lead">'+t('gt_text')+'</p><p style="margin-top:34px"><a class="btn" href="#/guide">'+t('gt_cta')+'</a></p></div></div></div></section></div>';
+ '</div>';
 }
 function aptsView(){
   const list=APTS.filter(a=>(F.type==='all'||a.type===F.type)&&a.guests>=F.guests&&(!F.fav||favs.has(a.id)));
