@@ -3,15 +3,15 @@
 /* ═════════ RÉGLAGES À MODIFIER ═════════ */
 window.ULS_CONFIG={
   brand:'Urban Luxury Stay',
- whatsapp:'212784345538',
-email:'urbanluxurystay@gmail.com',
-instagram:'https://www.instagram.com/urbanluxurystay.ma/',
-tiktok:'https://www.tiktok.com/@urbanluxurystay',
+  email:'urbanluxurystay@gmail.com',
+  whatsapp:'212784345538',
+  instagram:'https://www.instagram.com/urbanluxurystay.ma/',
+  tiktok:'https://www.tiktok.com/@urbanluxurystay',
   // ── Hero (écran d'accueil) ──
   // Photo plein écran (ex. CFC de nuit). Mettez votre fichier dans images/hero/ puis indiquez son nom ici.
   // Si le fichier est absent, une animation de secours s'affiche.
   heroImage:'images/hero/cfc-night.jpg',
-  // Option vidéo (à la place de la photo) : videez heroImage:'' puis indiquez par ex. 'assets/hero.mp4'
+  // Option vidéo (à la place de la photo) : videz heroImage:'' puis indiquez par ex. 'assets/hero.mp4'
   heroVideo:'',
   // Images des blocs en arche (laissez '' pour garder l'illustration)
   images:{loyalty:'',guide:'',about:''},
