@@ -425,7 +425,7 @@ document.addEventListener('error',e=>{
 },true);
 
 /* ═════════ GUIDE CASABLANCA (à valider / compléter) ═════════ */
-const GUIDE=window.ULS_GUIDE;
+const GUIDE=Array.isArray(window.ULS_GUIDE)?window.ULS_GUIDE:[];
 const CATS=['restaurants','cafes','sights','museums','rooftops','shopping','activities'];
 const REWARDS=[{p:100,k:'r100'},{p:300,k:'r300'},{p:1000,k:'r1000'},{p:3000,k:'r3000'}];
 
@@ -563,7 +563,7 @@ const Hero=(()=>{
 })();
 
 /* ═════════ NAV / FOOTER ═════════ */
-const ROUTES=[['home','nav_home','#/'],['apartments','nav_apts','#/apartments'],['guide','nav_guide','#/guide'],['loyalty','nav_loyalty','#/loyalty'],['about','nav_about','#/about'],['faq','nav_faq','#/faq'],['contact','nav_contact','#/contact']];
+const ROUTES=[['home','nav_home','#/'],['apartments','nav_apts','#/apartments'],['loyalty','nav_loyalty','#/loyalty'],['about','nav_about','#/about'],['faq','nav_faq','#/faq'],['contact','nav_contact','#/contact']];
 const parse=()=>{const p=(location.hash||'#/').slice(1).split('/').filter(Boolean);let n=p[0]||'home';if(n==='apartment'&&!p[1])n='apartments';return{name:n,id:p[1]}};
 function renderChrome(){
   const cur=parse().name==='apartment'?'apartments':parse().name;
@@ -772,10 +772,11 @@ function updateBooking(){
   $('#bkFileLbl').textContent=bk.file?t('b_id_retake'):t('b_id_take');
 }
 function guideView(){
-  const list=GUIDE.filter(p=>gcat==='all'||p.c===gcat);
+  const list=Array.isArray(GUIDE)?GUIDE.filter(p=>gcat==='all'||(p&&p.c===gcat)):[];
+  const empty = !list.length;
   return '<div class="page light view"><div class="wrap"><div class="rule"></div><h1 class="title">'+t('g_title')+'</h1><p class="lead">'+t('g_sub')+'</p>'+
    '<div class="tabs">'+['all'].concat(CATS).map(c=>'<button class="chip '+(gcat===c?'on':'')+'" data-cat="'+c+'">'+(c==='all'?t('g_all'):t('c_'+c))+'</button>').join('')+'</div>'+
-   '<div class="places">'+list.map(p=>'<article class="place"><span class="cat">'+t('c_'+p.c)+'</span><h3>'+p.n+'</h3><p>'+L(p.d)+'</p><a href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(p.n+' Casablanca')+'" target="_blank" rel="noopener">'+I.pin+t('g_maps')+'</a></article>').join('')+'</div>'+
+   (empty ? '<p class="lead">'+t('none')+'</p>' : '<div class="places">'+list.map(p=>'<article class="place"><span class="cat">'+t('c_'+(p.c||'activities'))+'</span><h3>'+(p.n||'')+'</h3><p>'+L(p.d||[])+'</p><a href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent((p.n||'Casablanca')+' Casablanca')+'" target="_blank" rel="noopener">'+I.pin+t('g_maps')+'</a></article>').join('')+'</div>')+
    '<p class="gnote"><a href="'+wa('Bonjour, j’aimerais une recommandation à Casablanca.')+'" target="_blank" rel="noopener" style="color:var(--acc)">'+t('g_note')+'</a></p></div></div>';
 }
 function simHTML(){
@@ -844,7 +845,6 @@ function render(keep){
     case'home':html=homeView();break;
     case'apartments':html=aptsView();break;
     case'apartment':{const a=APTS.find(x=>x.id===r.id);html=a?detailView(a):aptsView();break}
-    case'guide':html=guideView();break;
     case'loyalty':html=loyaltyView();break;
     case'about':html=aboutView();break;
     case'faq':html=faqView();break;
@@ -853,7 +853,7 @@ function render(keep){
   }
   app.innerHTML=html;
   if(!keep)window.scrollTo(0,0);
-  if(['apartments','apartment','guide','loyalty','about','faq','contact'].indexOf(r.name)<0)Hero.show();
+  if(['apartments','apartment','loyalty','about','faq','contact'].indexOf(r.name)<0)Hero.show();
   renderChrome();
   if(r.name==='apartment'){
     updateBooking();
@@ -908,7 +908,6 @@ document.addEventListener('click',e=>{
 if(nl){e.preventDefault();document.body.classList.remove('menu-open');location.hash=nl.getAttribute('href');return}
   const ty=tg.closest('[data-type]');if(ty){F.type=ty.dataset.type;render(true);return}
   if(tg.closest('[data-favf]')){F.fav=!F.fav;render(true);return}
-  const ct=tg.closest('[data-cat]');if(ct){gcat=ct.dataset.cat;render(true);return}
   const gi=tg.closest('[data-gi]');if(gi){setGal(+gi.dataset.gi);return}
   const gn=tg.closest('[data-gnav]');if(gn){const ga=APTS.find(x=>x.id===parse().id);if(ga){const N=galN(ga);setGal((galIdx+ +gn.dataset.gnav+N)%N)}return}
   const gt=tg.closest('[data-goto]');if(gt){e.preventDefault();const b=$('#book');if(b)b.scrollIntoView({behavior:'smooth',block:'start'});return}
