@@ -662,9 +662,12 @@ function bookingHTML(a){
    '<div class="date-calendar" id="bkCalendar"></div>'+
    '<div class="field"><label>'+t('s_guests')+'<select id="bkGuests">'+guestOpts(a.guests,bk.guests)+'</select></label><p class="hint">'+t('b_cap',{n:a.guests})+'</p></div>'+
    '<div class="field"><label>'+t('b_name')+'<input id="bkName" autocomplete="name" value="'+esc(bk.name)+'"></label></div>'+
-    '<img id="bkImg" alt="" '+(bk.idUrl?'src="'+bk.idUrl+'"':'hidden')+'></div></div>'+
-   '<div class="lines" id="bkLines"></div><p class="err" id="bkErr" role="alert"></p>'+
-   '<a class="btn solid full" id="bkSend" href="#" target="_blank" rel="noopener">'+I.wa+t('b_send')+'</a><p class="hint">'+t('b_nopay')+'</p><div id="bkAfter"></div>';
+   '<img id="bkImg" alt="" '+(bk.idUrl?'src="'+bk.idUrl+'"':'hidden')+'>'+
+   '<div class="lines" id="bkLines"></div>'+
+   '<p class="err" id="bkErr" role="alert"></p>'+
+   '<a class="btn solid full" id="bkSend" href="#" target="_blank" rel="noopener">'+I.wa+t('b_send')+'</a>'+
+   '<p class="hint">'+t('b_nopay')+'</p>'+
+   '<div id="bkAfter"></div>';
 }
 const curApt=()=>APTS.find(a=>a.id===bk.aptId);
 function bkValidate(a){
