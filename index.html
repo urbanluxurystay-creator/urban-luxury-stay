@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Urban Luxury Stay — Maroc</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta name="description" content="Appartements et villas de luxe au Maroc. Urban Luxury Stay.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600&family=Jost:wght@300;400;500;600&family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="nav" id="nav"></header>
+<div class="mnav" id="mnav"></div>
+
+<!-- HERO : modèle fourni (scroll-scrub vidéo verrouillé) -->
+<div id="hero" class="hero" hidden>
+  <div class="fb" id="hFb" aria-hidden="true">
+    <div class="fbg" id="fbGlow"></div><div class="fbb"></div>
+    <div class="fbp" id="fbL"></div><div class="fbp" id="fbR"></div>
+  </div>
+<img id="hImg" alt="" hidden>
+<img id="hImg2" alt="" hidden>
+<video id="hVideo" muted playsinline preload="auto"></video>
+  <div class="shade"></div>
+  <div class="hc" id="hTitle"><span data-i="hero_title"></span></div>
+  <div class="hc" id="hTag"><span data-i="hero_tag"></span></div>
+  <div id="hHint"><span data-i="hero_hint"></span>
+    <svg width="14" height="18" viewBox="0 0 14 18" aria-hidden="true"><path d="M7 1 L7 17 M2 12 L7 17 L12 12" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+  <div class="bar"><div id="hBar"></div></div>
+</div>
+
+<main id="app"></main>
+<footer id="footer"></footer>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="config.js"></script>
+<script src="script.js"></script>
+<script src="database.js"></script>
+</body>
+</html>
