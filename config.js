@@ -221,9 +221,8 @@ window.ULS_APTS=[
   'images/apartments/bourgogne-signature/chambre6.JPG',
   'images/apartments/bourgogne-signature/chambre7.JPG',
   'images/apartments/bourgogne-signature/toilette1.JPG',
-<<<<<<< HEAD
-  'images/apartments/bourgogne-signature/toilette1.JPG',
   'images/apartments/bourgogne-signature/toilette2.JPG'
+ ],
   // Périodes déjà réservées pour ce logement : à compléter à la main après CHAQUE confirmation WhatsApp.
   // Exemple : {from:'2026-10-05',to:'2026-10-08'}  (from inclus, to = jour de départ, exclu)
   blockedDates:[],
