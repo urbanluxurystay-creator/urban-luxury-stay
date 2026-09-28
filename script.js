@@ -247,9 +247,6 @@ b_cap:['Capacité maximale : {n} voyageurs. Ménage inclus.','Maximum capacity: 
 b_nights:['{n} nuit(s) × {p}','{n} night(s) × {p}','{n} ليلة × {p}'],
 b_total:['Total','Total','المجموع'],
 b_name:['Nom complet','Full name','الاسم الكامل'],
-b_id_t:['Carte nationale','National ID card','بطاقة التعريف الوطنية'],
-b_id_h:['Prenez en photo votre carte nationale pour valider la réservation.','Take a photo of your national ID card to validate the booking.','التقط صورة لبطاقتك الوطنية لتأكيد الحجز.'],
-b_id_take:['Prendre la photo','Take photo','التقاط صورة'],b_id_retake:['Reprendre la photo','Retake photo','إعادة التقاط الصورة'],
 b_send:['Confirmer sur WhatsApp','Confirm on WhatsApp','التأكيد عبر واتساب'],
 b_nopay:['Aucun paiement en ligne : la réservation se confirme sur WhatsApp.','No online payment: the booking is confirmed on WhatsApp.','لا دفع عبر الإنترنت: يتم تأكيد الحجز عبر واتساب.'],
 b_pts:['Ce séjour vous fait gagner {n} point(s) fidélité.','This stay earns you {n} loyalty point(s).','هذه الإقامة تمنحك {n} نقطة ولاء.'],
@@ -668,9 +665,6 @@ function bookingHTML(a){
    '<div class="date-calendar" id="bkCalendar"></div>'+
    '<div class="field"><label>'+t('s_guests')+'<select id="bkGuests">'+guestOpts(a.guests,bk.guests)+'</select></label><p class="hint">'+t('b_cap',{n:a.guests})+'</p></div>'+
    '<div class="field"><label>'+t('b_name')+'<input id="bkName" autocomplete="name" value="'+esc(bk.name)+'"></label></div>'+
-   '<div class="idbox"><h4>'+t('b_id_t')+'</h4><p class="hint" style="margin:0">'+t('b_id_h')+'</p><div class="row">'+
-    '<label class="btn" for="bkFile" style="cursor:pointer;margin:0">'+I.cam+'<span id="bkFileLbl">'+(bk.file?t('b_id_retake'):t('b_id_take'))+'</span></label>'+
-    '<input type="file" id="bkFile" accept="image/*" capture="environment" hidden>'+
     '<img id="bkImg" alt="" '+(bk.idUrl?'src="'+bk.idUrl+'"':'hidden')+'></div></div>'+
    '<div class="lines" id="bkLines"></div><p class="err" id="bkErr" role="alert"></p>'+
    '<a class="btn solid full" id="bkSend" href="#" target="_blank" rel="noopener">'+I.wa+t('b_send')+'</a><p class="hint">'+t('b_nopay')+'</p><div id="bkAfter"></div>';
@@ -681,13 +675,11 @@ function bkValidate(a){
   if(isBlocked(a,bk.in,bk.out))return'e_unavailable';
   if(bk.guests<1||bk.guests>a.guests)return'e_guests';
   if(!bk.name.trim())return'e_name';
-  if(!bk.file)return'e_id';
   return null;
 }
 function waBooking(a){
   const c=calcStay(a,bk.in,bk.out);
-  return 'Bonjour '+CONFIG.brand+',\nJe souhaite réserver :\n- Logement : '+a.name+' ('+a.area+')\n- Arrivée : '+fmtDate(bk.in)+'\n- Départ : '+fmtDate(bk.out)+'\n- Voyageurs : '+bk.guests+'\n- Durée : '+c.n+' nuit(s)\n- Total : '+c.total.toLocaleString('fr-FR')+' MAD (ménage inclus)\n- Nom : '+bk.name.trim()+'\n\nJe vous envoie la photo de ma carte nationale pour confirmer la réservation.';
-}
+return 'Bonjour '+CONFIG.brand+',\nJe souhaite réserver :\n- Logement : '+a.name+' ('+a.area+')\n- Arrivée : '+fmtDate(bk.in)+'\n- Départ : '+fmtDate(bk.out)+'\n- Voyageurs : '+bk.guests+'\n- Durée : '+c.n+' nuit(s)\n- Total : '+c.total.toLocaleString('fr-FR')+' MAD (ménage inclus)\n- Nom : '+bk.name.trim()+'\n\nVeuillez ajouter votre pièce d’identité afin de confirmer votre réservation.';}
 function collectBlockedDates(a){
   const blocked=new Set();
   const ranges=(a&&a.blockedDates||[]).filter(r=>r&&r.from&&r.to);
@@ -779,7 +771,6 @@ function updateBooking(){
   $('#bkErr').textContent=bk.tried&&err?t(err):'';
   const s=$('#bkSend');s.setAttribute('aria-disabled',err?'true':'false');s.href=err?'#':wa(waBooking(a));
   const im=$('#bkImg');if(bk.idUrl){im.src=bk.idUrl;im.hidden=false}else im.hidden=true;
-  $('#bkFileLbl').textContent=bk.file?t('b_id_retake'):t('b_id_take');
 }
 function guideView(){
   const list=Array.isArray(GUIDE)?GUIDE.filter(p=>gcat==='all'||(p&&p.c===gcat)):[];
