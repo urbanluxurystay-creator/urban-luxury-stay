@@ -30,14 +30,24 @@ function nightInfo(dateStr){
 function apartmentNightPrice(apt,dateStr){
   if(!apt || apt.type !== 'apartment') return null;
   const dow=new Date(dateStr+'T00:00:00').getDay();
-  const base = 600;
-  return (dow === 5 || dow === 6) ? 700 : base;
+  const base = apt.price || 600;
+  const isWeekend = (CONFIG.weekendNights||[]).includes(dow);
+  if(isWeekend){
+    if(typeof apt.weekendPrice === 'number') return apt.weekendPrice;
+    return Math.round(base * (CONFIG.weekendMultiplier || 1));
+  }
+  return base;
 }
 function villaNightPrice(apt,dateStr){
   if(!apt || apt.type !== 'villa') return null;
   const dow=new Date(dateStr+'T00:00:00').getDay();
-  const base = 4000;
-  return (dow === 5 || dow === 6) ? 4500 : base;
+  const base = apt.price || 4000;
+  const isWeekend = (CONFIG.weekendNights||[]).includes(dow);
+  if(isWeekend){
+    if(typeof apt.weekendPrice === 'number') return apt.weekendPrice;
+    return Math.round(base * (CONFIG.weekendMultiplier || 1));
+  }
+  return base;
 }
 function propertyNightPrice(apt,dateStr){
   if(!apt) return null;

@@ -205,7 +205,7 @@ window.ULS_APTS=[
   desc:['Studio lumineux au cœur du quartier Les Princesses, à Casablanca. Un espace élégant et chaleureux, avec un salon ouvert sur un balcon.','Bright studio in the heart of the Les Princesses neighborhood in Casablanca. An elegant and welcoming space, with a living room opening onto a balcony.','استوديو مضيء في قلب حي الأميرات بالدار البيضاء. مساحة أنيقة ودافئة، مع غرفة معيشة تطل على شرفة.'],
   reviews:[{n:'Noura S.',y:2026,m:6,r:5,x:['Très belle adresse, calme et bien située. On a adoré la lumière et le balcon.','A very beautiful address, calm and well located. We loved the light and the balcony.','عنوان جميل جدًا، هادئ وموقعه ممتاز. أعجبنا الضوء والشرفة.']},{n:'Samir D.',y:2026,m:9,r:5,x:['Appartement très propre et très confortable. La communication avec l’équipe était parfaite.','Very clean and very comfortable apartment. Communication with the team was perfect.','شقة نظيفة ومريحة جدًا. التواصل مع الفريق كان ممتازًا.']},{n:'Hajar M.',y:2026,m:10,r:4,x:['La décoration pour l’anniversaire était magnifique. L’appartement avait une ambiance très chic et accueillante.','The anniversary decoration was amazing. The apartment had a very chic and welcoming atmosphere.','كانت الزينة الخاصة بعيد الميلاد رائعة. كانت الشقة أنيقة جدًا وودودة.']},{n:'Thomas R.',y:2026,m:3,r:5,x:['Une adresse rare : le confort d’un hôtel cinq étoiles avec l’espace d’un studio.','A rare address: the comfort of a five-star hotel with the space of a studio.','عنوان نادر: راحة فندق خمس نجوم مع مساحة استوديو.']},{n:'Amina K.',y:2026,m:11,r:5,x:['Très belle expérience, très bien accueillis et très satisfait de l’ambiance générale.','A very good experience, warmly welcomed and very satisfied with the overall atmosphere.','تجربة رائعة جدًا، استقبلنا بطريقة ممتازة ونحن راضون جدًا عن الجو العام.']}],
   am:['wifi','ac','terrace','kitchen','coffee','tv','linen','security','washer']},
- {id:'bourgogne-signature',name:'Studio Val Fleuri Signature',type:'apartment',area:'Val fleuri',price:600,guests:3,bedrooms:1,beds:1,baths:1,size:110,view:'city',hs:1,seed:6,photos:['images/apartments/bourgogne-signature/salon3.JPG',
+ {id:'bourgogne-signature',name:'Studio Val Fleuri Signature',type:'apartment',area:'Val fleuri',price:700,weekendPrice:800,guests:3,bedrooms:1,beds:1,baths:1,size:110,view:'city',hs:1,seed:6,photos:['images/apartments/bourgogne-signature/salon3.JPG',
   'images/apartments/bourgogne-signature/salon2.JPG',
   'images/apartments/bourgogne-signature/salon4.JPG',
   'images/apartments/bourgogne-signature/sal.JPG',
@@ -221,8 +221,7 @@ window.ULS_APTS=[
   'images/apartments/bourgogne-signature/chambre6.JPG',
   'images/apartments/bourgogne-signature/chambre7.JPG',
   'images/apartments/bourgogne-signature/toilette1.JPG',
-  'images/apartments/bourgogne-signature/toilette2.JPG',
-
+  'images/apartments/bourgogne-signature/toilette2.JPG'
  ],
   // Périodes déjà réservées pour ce logement : à compléter à la main après CHAQUE confirmation WhatsApp.
   // Exemple : {from:'2026-10-05',to:'2026-10-08'}  (from inclus, to = jour de départ, exclu)
