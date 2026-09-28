@@ -919,12 +919,35 @@ if(nl){e.preventDefault();document.body.classList.remove('menu-open');location.h
   const gt=tg.closest('[data-goto]');if(gt){e.preventDefault();const b=$('#book');if(b)b.scrollIntoView({behavior:'smooth',block:'start'});return}
   if(tg.closest('#shareBtn')){shareApt();return}
   const sd=tg.closest('#bkSend');
-  if(sd){const a=curApt();const err=a&&bkValidate(a);
-    if(err){e.preventDefault();bk.tried=true;updateBooking();return}
-    const canShare=navigator.canShare&&bk.file&&(()=>{try{return navigator.canShare({files:[bk.file]})}catch(x){return false}})();
-    $('#bkAfter').innerHTML='<div class="ok-note">'+t('b_after')+(canShare?'<br><button class="btn" id="bkShareId" type="button">'+I.wa+t('b_shareid')+'</button>':'')+'</div>';
-    return}
-  if(tg.closest('#bkShareId')){const a=curApt();try{navigator.share({files:[bk.file],title:CONFIG.brand,text:waBooking(a)}).catch(()=>{})}catch(x){}return}
+  if(sd){
+    const a=curApt();
+    const err=a&&bkValidate(a);
+    if(err){
+      e.preventDefault();bk.tried=true;updateBooking();return
+    }
+    e.preventDefault();
+    const canShare = navigator.canShare && bk.file && (()=>{try{return navigator.canShare({files:[bk.file]})}catch(x){return false}})();
+    // If the browser supports sharing files, share the ID + booking message in one action.
+    if(canShare){
+      try{
+        navigator.share({files:[bk.file],title:CONFIG.brand,text:waBooking(a)}).then(()=>{
+          $('#bkAfter').innerHTML='<div class="ok-note">'+t('b_after')+'</div>';
+        }).catch(()=>{
+          // fallback: open WhatsApp with the booking message (user can attach the photo manually)
+          window.open(wa(waBooking(a)), '_blank');
+          $('#bkAfter').innerHTML='<div class="ok-note">'+t('b_after')+'</div>';
+        });
+      }catch(x){
+        window.open(wa(waBooking(a)), '_blank');
+        $('#bkAfter').innerHTML='<div class="ok-note">'+t('b_after')+'</div>';
+      }
+    } else {
+      // No share-with-file support: open WhatsApp with the booking message (user should attach the ID manually)
+      window.open(wa(waBooking(a)), '_blank');
+      $('#bkAfter').innerHTML='<div class="ok-note">'+t('b_after')+'</div>';
+    }
+    return
+  }
 });
 function setGal(i){
   const a=curApt()||APTS.find(x=>x.id===parse().id);if(!a)return;galIdx=i;

@@ -188,7 +188,7 @@ window.ULS_APTS=[
   blockedDates:[],
   desc:['Villa contemporaine dans le quartier résidentiel d’Anfa, avec piscine privée et jardin paysager. Idéale pour les familles et les séjours entre amis, avec un service digne d’un palace.','A contemporary villa in the residential district of Anfa, with a private pool and landscaped garden. Ideal for families and stays with friends, with palace-level service.','فيلا عصرية في حي أنفا السكني، بمسبح خاص وحديقة منسقة. مثالية للعائلات والإقامات مع الأصدقاء، بخدمة بمستوى القصور.'],
   am:['wifi','ac','pool','garden','kitchen','parking','concierge','washer','tv','linen','elevator','security']},
- {id:'suite-corniche-ocean',name:'Princesses Signature',type:'apartment',area:'Princesses',price:600,guests:3,bedrooms:1,beds:1,baths:1,size:75,view:'sea',hs:1,seed:1,photos:['images/apartments/suite-corniche-ocean/chambre3.jpg',
+{id:'suite-corniche-ocean',name:'Princesses Signature',type:'apartment',area:'Princesses',price:600,guests:3,bedrooms:1,beds:1,baths:1,size:75,view:'city',hs:1,seed:1,photos:['images/apartments/suite-corniche-ocean/chambre3.jpg',
   'images/apartments/suite-corniche-ocean/salon.jpg',
   'images/apartments/suite-corniche-ocean/entrer.PNG',
   'images/apartments/suite-corniche-ocean/cuisine.jpg',
