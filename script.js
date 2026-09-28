@@ -219,6 +219,9 @@ v4t:['Plus vous séjournez, plus vous gagnez : bons d’achat et nuits offertes.
 lt_title:['10 points, une nuit offerte','10 points, one free night','10 نقاط، ليلة مجانية'],
 lt_text:['Chaque nuit passée chez nous vous rapproche d’une récompense : bons d’achat, avantages et nuits offertes.','Every night with us brings you closer to a reward: vouchers, perks and free nights.','كل ليلة تقضيها عندنا تقرّبك من مكافأة: قسائم ومزايا وليالٍ مجانية.'],
 lt_cta:['Découvrir le programme','Discover the programme','اكتشف البرنامج'],
+gt_title:['Casablanca, vue de l’intérieur','Casablanca, from the inside','الدار البيضاء من الداخل'],
+gt_text:['Restaurants, cafés, rooftops, musées : nos adresses pour vivre la ville comme un local.','Restaurants, cafés, rooftops, museums: our addresses to live the city like a local.','مطاعم، مقاهٍ، أسطح بانورامية ومتاحف: عناويننا لتعيش المدينة كأهلها.'],
+gt_cta:['Explorer le guide','Explore the guide','استكشف الدليل'],
 ap_title:['Studios et villas','Studios and villas','استوديوهات وفيلات'],
 ap_sub:['Choisissez votre adresse à Casablanca.','Choose your address in Casablanca.','اختر عنوانك في الدار البيضاء.'],
 f_all:['Tous','All','الكل'],f_apartment:['Studios','Studios','استوديوهات'],f_villa:['Villas','Villas','فيلات'],
@@ -616,7 +619,8 @@ function homeView(){
   '<section class="sec dark" style="padding-top:clamp(56px,7vw,96px)"><div class="wrap"><div class="rule"></div><h2 class="title" style="margin-bottom:clamp(36px,5vw,64px)">'+t('feat_title')+'</h2><div class="grid">'+APTS.map(aptCard).join('')+'</div></div></section>'+
   '<section class="sec light"><div class="wrap"><div class="rule"></div><h2 class="title" style="max-width:16ch">'+t('val_title')+'</h2><div class="vals">'+
     [1,2,3,4].map(i=>'<div class="val"><h3>'+t('v'+i)+'</h3><p>'+t('v'+i+'t')+'</p></div>').join('')+'</div></div></section>'+
-  '<section class="sec dark"><div class="wrap"><div class="band"><div><div class="mega">10</div><h2 class="title">'+t('lt_title')+'</h2><p class="lead">'+t('lt_text')+'</p><p style="margin-top:34px"><a class="btn solid" href="#/loyalty">'+t('lt_cta')+'</a></p></div><div class="arch">'+blockPic('loyalty',0,21)+'</div></div></div></section></div>';
+  '<section class="sec dark"><div class="wrap"><div class="band"><div><div class="mega">10</div><h2 class="title">'+t('lt_title')+'</h2><p class="lead">'+t('lt_text')+'</p><p style="margin-top:34px"><a class="btn solid" href="#/loyalty">'+t('lt_cta')+'</a></p></div><div class="arch">'+blockPic('loyalty',0,21)+'</div></div></div></section>'+
+  '<section class="sec light"><div class="wrap"><div class="band"><div class="arch" style="order:2">'+blockPic('guide',3,9)+'</div><div><div class="rule"></div><h2 class="title">'+t('gt_title')+'</h2><p class="lead">'+t('gt_text')+'</p><p style="margin-top:34px"><a class="btn" href="#/guide">'+t('gt_cta')+'</a></p></div></div></div></section></div>';
 }
 function aptsView(){
   const list=APTS.filter(a=>(F.type==='all'||a.type===F.type)&&a.guests>=F.guests&&(!F.fav||favs.has(a.id)));
@@ -919,7 +923,9 @@ if(nl){e.preventDefault();document.body.classList.remove('menu-open');location.h
   const gt=tg.closest('[data-goto]');if(gt){e.preventDefault();const b=$('#book');if(b)b.scrollIntoView({behavior:'smooth',block:'start'});return}
   if(tg.closest('#shareBtn')){shareApt();return}
   const sd=tg.closest('#bkSend');
+
 if(sd){
+
   const a=curApt();
   const err=a&&bkValidate(a);
 
@@ -930,29 +936,39 @@ if(sd){
     return;
   }
 
+  e.preventDefault();
+
   if(bk.file && navigator.share){
-  try{
 
     alert('Sélectionnez WhatsApp pour envoyer votre réservation et votre carte nationale à Urban Luxury Stay.');
 
-    await navigator.share({
-      files:[bk.file],
-      title:CONFIG.brand,
-      text:waBooking(a)
-    });
+    try{
+      navigator.share({
+        files:[bk.file],
+        title:CONFIG.brand,
+        text:waBooking(a)
+      }).then(()=>{
+        $('#bkAfter').innerHTML='<div class="ok-note">'+t('b_after')+'</div>';
+      }).catch((x)=>{
+        if(x&&x.name==='AbortError') return;
 
+        window.open(wa(waBooking(a)), '_blank');
+        $('#bkAfter').innerHTML='<div class="ok-note">'+t('b_after')+'</div>';
+      });
+
+    }catch(x){
+      window.open(wa(waBooking(a)), '_blank');
+      $('#bkAfter').innerHTML='<div class="ok-note">'+t('b_after')+'</div>';
+    }
+
+  }else{
+
+    window.open(wa(waBooking(a)), '_blank');
     $('#bkAfter').innerHTML='<div class="ok-note">'+t('b_after')+'</div>';
-    return;
 
-  }catch(x){
-    if(x && x.name==='AbortError') return;
   }
-}
 
-window.open(wa(waBooking(a)), '_blank');
-$('#bkAfter').innerHTML='<div class="ok-note">'+t('b_after')+'</div>';
-
-return;
+  return;
 }
 });
 function setGal(i){
