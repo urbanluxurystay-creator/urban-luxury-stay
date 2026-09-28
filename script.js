@@ -938,35 +938,9 @@ if(sd){
 
   e.preventDefault();
 
-  if(bk.file && navigator.share){
+  window.open(wa(waBooking(a)), '_blank');
 
-    alert('Sélectionnez WhatsApp pour envoyer votre réservation et votre carte nationale à Urban Luxury Stay.');
-
-    try{
-      navigator.share({
-        files:[bk.file],
-        title:CONFIG.brand,
-        text:waBooking(a)
-      }).then(()=>{
-        $('#bkAfter').innerHTML='<div class="ok-note">'+t('b_after')+'</div>';
-      }).catch((x)=>{
-        if(x&&x.name==='AbortError') return;
-
-        window.open(wa(waBooking(a)), '_blank');
-        $('#bkAfter').innerHTML='<div class="ok-note">'+t('b_after')+'</div>';
-      });
-
-    }catch(x){
-      window.open(wa(waBooking(a)), '_blank');
-      $('#bkAfter').innerHTML='<div class="ok-note">'+t('b_after')+'</div>';
-    }
-
-  }else{
-
-    window.open(wa(waBooking(a)), '_blank');
-    $('#bkAfter').innerHTML='<div class="ok-note">'+t('b_after')+'</div>';
-
-  }
+  $('#bkAfter').innerHTML='<div class="ok-note">'+t('b_after')+'</div>';
 
   return;
 }
