@@ -199,9 +199,9 @@ faq_fees_a:['Oui. Le Wi-Fi, le ménage, les charges et les taxes sont inclus. Au
 faq_special:['Proposez-vous des services pour les occasions spéciales ?','Do you offer services for special occasions?','هل تقدمون خدمات للمناسبات الخاصة؟'],
 faq_special_a:['Oui. Nous proposons des services personnalisés pour les anniversaires, la Saint-Valentin et autres occasions spéciales. Ces services sont disponibles sur demande et facturés séparément.','Yes. We offer personalized services for birthdays, Valentine’s Day and other special occasions. These services are available upon request and are charged separately.','نعم، نقدم خدمات مخصصة لأعياد الميلاد، عيد الحب ومختلف المناسبات الخاصة. تتوفر هذه الخدمات عند الطلب ويتم احتسابها بشكل منفصل.'],
 nav_contact:['Contact','Contact','اتصل بنا'],
-hero_title:['LA VILLE S’OUVRE','THE CITY OPENS','المدينة تنفتح'],
-hero_tag:['Toutes les portes de la ville sont déjà ouvertes.','Every door in the city is already open.','كل أبواب المدينة مفتوحة بالفعل.'],
-hero_hint:['DÉFILER','SCROLL','مرّر'],
+hero_title:['ENTRÉE DANS L’ÉLÉGANCE','STEP INTO ELEGANCE','ادخل إلى عالم الأناقة'],
+hero_tag:['BIENVENUE CHEZ URBAN LUXURY STAY','WELCOME TO URBAN LUXURY STAY','مرحباً بكم في Urban Luxury Stay'],
+hero_hint:['DÉCOUVRIR','DISCOVER','اكتشف'],
 s_arrival:['Arrivée','Check-in','الوصول'],
 s_departure:['Départ','Check-out','المغادرة'],
 s_guests:['Voyageurs','Guests','المسافرون'],
@@ -535,7 +535,7 @@ const Hero=(()=>{
     add(m[e.key]);e.preventDefault();
   }
   function frame(){
-    cur+=(target-cur)*.18;if(Math.abs(target-cur)<.0004)cur=target;
+    cur+=(target-cur)*.24;if(Math.abs(target-cur)<.0004)cur=target;
     if(imgMode)imgEl.style.transform='scale('+(1.02+cur*.12)+')';
     if(!imgMode&&duration>0&&ready){const tt=Math.min(cur*duration,Math.max(0,duration-.05));if(Math.abs(tt-lastT)>.01){lastT=tt;seekTo(tt)}}
     if(!imgMode)video.style.transform='scale('+(1+cur*.06)+')';
