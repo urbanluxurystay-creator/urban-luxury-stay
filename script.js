@@ -991,18 +991,29 @@ document.addEventListener('change',e=>{
 });
 
 /* ═════════ DÉMARRAGE ═════════ */
-document.documentElement.lang=lang;document.documentElement.dir=lang==='ar'?'rtl':'ltr';
-applyI18n();
-render(false);
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => {
-    hydrateBlockedDates().catch(() => {});
-  });
-} else {
-  hydrateBlockedDates().catch(() => {});
-}
-})();
 
+document.documentElement.lang=lang;
+document.documentElement.dir=lang==='ar'?'rtl':'ltr';
+
+applyI18n();
+
+async function startSite(){
+  try{
+    await hydrateBlockedDates();
+  }catch(e){
+    console.warn('Synchronisation des disponibilités impossible.',e);
+  }
+
+  render(false);
+}
+
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded',startSite);
+}else{
+  startSite();
+}
+
+})();
 /* ═════════ MES POINTS ═════════ */
 
 async function afficherMesPoints(){
