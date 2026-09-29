@@ -1016,7 +1016,8 @@ async function afficherMesPoints(){
 
     console.log('Données client reçues :', data);
 
-    const rawPoints = data && data.points;
+   alert('DONNÉES REÇUES :\n\n' + JSON.stringify(data, null, 2));
+const rawPoints = data && data.points;
 
     const points = Number(
       String(rawPoints ?? '0')
