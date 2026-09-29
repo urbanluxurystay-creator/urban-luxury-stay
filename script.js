@@ -1007,13 +1007,23 @@ if (document.readyState === 'loading') {
 
 async function afficherMesPoints(){
 
-const phone = prompt('Entrez votre numéro de téléphone :');
+  const phone = prompt('Entrez votre numéro de téléphone :');
   if(!phone) return;
 
   try{
 
     const data = await ULS_DATABASE.getClient(phone);
-    const points = Number(data && data.points) || 0;
+
+    console.log('Données client reçues :', data);
+
+    const rawPoints = data && data.points;
+
+    const points = Number(
+      String(rawPoints ?? '0')
+        .replace(/\s/g,'')
+        .replace(',','.')
+        .replace(/[^\d.-]/g,'')
+    ) || 0;
 
     alert('Vos points : ' + points);
 
@@ -1022,13 +1032,14 @@ const phone = prompt('Entrez votre numéro de téléphone :');
   }catch(error){
 
     alert(
-  'Une erreur est survenue : ' +
-error.message
-);
+      'Une erreur est survenue : ' +
+      error.message
+    );
 
   }
 
 }
+
 document.addEventListener('click',function(e){
 
   const btn = e.target.closest('[data-mes-points]');
