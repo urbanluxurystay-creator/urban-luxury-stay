@@ -997,23 +997,18 @@ document.documentElement.dir=lang==='ar'?'rtl':'ltr';
 
 applyI18n();
 
-async function startSite(){
-  try{
-    await hydrateBlockedDates();
-  }catch(e){
-    console.warn('Synchronisation des disponibilités impossible.',e);
-  }
-
-  render(false);
-}
+render(false);
 
 if(document.readyState==='loading'){
-  document.addEventListener('DOMContentLoaded',startSite);
+  document.addEventListener('DOMContentLoaded',()=>{
+    hydrateBlockedDates().catch(()=>{});
+  });
 }else{
-  startSite();
+  hydrateBlockedDates().catch(()=>{});
 }
 
 })();
+
 /* ═════════ MES POINTS ═════════ */
 
 async function afficherMesPoints(){
