@@ -106,7 +106,8 @@ html[dir=rtl] .hero #hHint{letter-spacing:.05em}
 .cb .area{color:var(--muted);margin:4px 0 12px}
 .stats{display:flex;flex-wrap:wrap;gap:6px 18px;color:var(--muted);font-size:14.5px;margin:0 0 16px;padding:0;list-style:none}
 .stats li{display:flex;align-items:center;gap:7px}
-.pr{display:flex;align-items:baseline;justify-content:space-between;gap:12px;border-top:1px solid var(--line);padding-top:14px}
+.pr{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding-top:14px}
+.card-rule{border-top:1px solid var(--line);margin-top:14px}
 .pr b{font-family:var(--serif);font-weight:500;font-size:24px}
 .pr .rt{display:flex;align-items:center;gap:6px;color:var(--acc)}
 .pr .rt span{color:var(--fg)}

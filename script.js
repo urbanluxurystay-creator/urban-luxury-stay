@@ -603,7 +603,7 @@ function aptCard(a){
    '<button class="heart '+(favs.has(a.id)?'on':'')+'" data-fav="'+a.id+'" aria-label="'+t('save')+'">'+I.heart+'</button></div>'+
    '<div class="cb"><h3><a href="#/apartment/'+a.id+'" style="text-decoration:none">'+esc(a.name)+'</a></h3><p class="area">'+a.area+', Casablanca</p>'+
    '<ul class="stats"><li>'+I.users+a.guests+' '+countLabel('u_guests',a.guests)+'</li><li>'+I.bed+a.bedrooms+' '+countLabel('u_bed',a.bedrooms)+'</li></ul>'+
-   '<div class="pr"><span><b>'+money(a.price)+'</b> <span class="muted">'+t('per_night')+'</span></span><span class="rt">'+I.star+'<span>'+r.toFixed(1)+'</span></span></div><p class="price-note">'+t('price_note')+'</p></div></article>';
+   '<div class="pr"><span><b>'+money(a.price)+'</b> <span class="muted">'+t('per_night')+'</span></span><span class="rt">'+I.star+'<span>'+r.toFixed(1)+'</span></span></div><p class="price-note">'+t('price_note')+'</p><div class="card-rule"></div></div></article>';
 }
 function guestOpts(max,sel){let o='';for(let i=1;i<=max;i++)o+='<option value="'+i+'"'+(i===sel?' selected':'')+'>'+i+'</option>';return o}
 
@@ -616,7 +616,7 @@ function homeView(){
 }
 function aptsView(){
   const list=APTS.filter(a=>(F.type==='all'||a.type===F.type)&&a.guests>=F.guests&&(!F.fav||favs.has(a.id)));
-  return '<div class="page dark view"><div class="wrap"><div class="rule"></div><h1 class="title">'+t('ap_title')+'</h1><p class="lead">'+t('ap_sub')+'</p>'+
+ return '<div class="page dark view"><div class="wrap"><h1 class="title">'+t('ap_title')+'</h1><p class="lead">'+t('ap_sub')+'</p>'+
    '<div class="filters">'+['all','apartment','villa'].map(k=>'<button class="chip '+(F.type===k?'on':'')+'" data-type="'+k+'">'+t('f_'+k)+'</button>').join('')+
    '<button class="chip '+(F.fav?'on':'')+'" data-favf="1">'+I.heart+t('f_fav')+'</button>'+
    '<label class="gsel">'+t('f_guests')+'<select id="fGuests">'+guestOpts(10,F.guests)+'</select></label></div>'+
