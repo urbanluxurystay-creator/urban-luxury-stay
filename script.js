@@ -677,7 +677,7 @@ function bkValidate(a){
 }
 function waBooking(a){
   const c=calcStay(a,bk.in,bk.out);
-return 'Bonjour '+CONFIG.brand+',\nJe souhaite réserver :\n- Logement : '+a.name+' ('+a.area+')\n- Arrivée : '+fmtDate(bk.in)+'\n- Départ : '+fmtDate(bk.out)+'\n- Voyageurs : '+bk.guests+'\n- Durée : '+c.n+' nuit(s)\n- Total : '+c.total.toLocaleString('fr-FR')+' MAD (ménage inclus)\n- Nom : '+bk.name.trim()+'\n\nVeuillez ajouter votre pièce d’identité afin de confirmer votre réservation.';}
+return 'Bonjour '+CONFIG.brand+',\nJe souhaite réserver :\n- Logement : '+a.name+' ('+a.area+')\n- Arrivée : '+fmtDate(bk.in)+'\n- Départ : '+fmtDate(bk.out)+'\n- Voyageurs : '+bk.guests+'\n- Durée : '+c.n+' nuit(s)\n- Total : '+c.total.toLocaleString('fr-FR')+' MAD (ménage inclus)\n- Nom : '+bk.name.trim()+'\n\nJe vous envoie la photo de ma pièce d’identité afin de confirmer ma réservation.';}
 function collectBlockedDates(a){
   const blocked=new Set();
   const ranges=(a&&a.blockedDates||[]).filter(r=>r&&r.from&&r.to);
