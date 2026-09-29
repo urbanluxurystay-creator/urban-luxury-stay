@@ -992,19 +992,24 @@ document.addEventListener('change',e=>{
 
 /* ═════════ DÉMARRAGE ═════════ */
 
-document.documentElement.lang=lang;
-document.documentElement.dir=lang==='ar'?'rtl':'ltr';
+document.documentElement.lang=lang;document.documentElement.dir=lang==='ar'?'rtl':'ltr';
 
 applyI18n();
 
 render(false);
 
-if(document.readyState==='loading'){
-  document.addEventListener('DOMContentLoaded',()=>{
-    hydrateBlockedDates().catch(()=>{});
+if (document.readyState === 'loading') {
+
+  document.addEventListener('DOMContentLoaded', () => {
+
+    hydrateBlockedDates().catch(() => {});
+
   });
-}else{
-  hydrateBlockedDates().catch(()=>{});
+
+} else {
+
+  hydrateBlockedDates().catch(() => {});
+
 }
 
 })();
