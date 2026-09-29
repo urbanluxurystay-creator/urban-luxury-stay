@@ -1014,21 +1014,23 @@ async function afficherMesPoints(){
 
     const data = await ULS_DATABASE.getClient(phone);
 
-    console.log('Données client reçues :', data);
+console.log('Données client reçues :', data);
 
-   alert('DONNÉES REÇUES :\n\n' + JSON.stringify(data, null, 2));
 const rawPoints = data && data.points;
 
-    const points = Number(
-      String(rawPoints ?? '0')
-        .replace(/\s/g,'')
-        .replace(',','.')
-        .replace(/[^\d.-]/g,'')
-    ) || 0;
+const points = Number(
+  String(rawPoints ?? '0')
+    .replace(/\s/g,'')
+    .replace(',','.')
+    .replace(/[^\d.-]/g,'')
+) || 0;
 
-    alert('Vos points : ' + points);
+alert(
+  '📱 Numéro de téléphone : ' + phone +
+  '\n\n⭐ Points fidélité : ' + points + ' points'
+);
 
-    return;
+return;
 
   }catch(error){
 
