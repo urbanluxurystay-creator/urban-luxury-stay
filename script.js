@@ -72,6 +72,13 @@ function calcStay(apt,inD,outD){
   });
   return{n:nights.length,total,special};
 }
+function nightlyBreakdown(apt,inD,outD){
+  const nights=nightsList(inD,outD);
+  return nights.map(dateStr=>({
+    date:dateStr,
+    price: propertyNightPrice(apt, dateStr) ?? Math.round((apt.price || 0) * (nightInfo(dateStr).mult || 1))
+  }));
+}
 function normalizeBlockedRange(r){
   if(!r || !r.from || !r.to) return null;
   const from = String(r.from).slice(0,10);
@@ -800,7 +807,10 @@ function updateBooking(){
   if(n>0&&!(err==='e_dates')){
     const c=calcStay(a,bk.in,bk.out);
     const nightPrice=bookingNightRate(a,bk.in,bk.out);
+    const breakdown = nightlyBreakdown(a,bk.in,bk.out);
+    const breakdownText = breakdown.length > 1 ? breakdown.map(item => money(item.price)).join(' + ') + ' = ' + money(c.total) : '';
     lines='<div><span>'+t('b_nights',{n:c.n,p:money(nightPrice)})+'</span><span>'+money(c.total)+'</span></div>'+
+      (breakdownText ? '<div class="muted" style="font-size:12px;line-height:1.5">'+breakdownText+'</div>' : '')+
       (c.special?'<div class="muted" style="font-size:13.5px">'+t('price_note')+'</div>':'')+
       '<div><span>'+t('f_clean')+'</span><span>'+t('f_clean_v')+'</span></div><div class="tot"><span>'+t('b_total')+'</span><span>'+money(c.total)+'</span></div><div class="muted" style="font-size:14px">'+t('b_pts',{n:c.n*CONFIG.pointsPerNight})+'</div>';
   }
