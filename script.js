@@ -1146,59 +1146,16 @@ if (document.readyState === 'loading') {
 }
 })();
 
-```js
 /* ═════════ MES POINTS ═════════ */
 
 async function afficherMesPoints(){
-
-  const phone = prompt('Entrez votre numéro de téléphone :');
-
-  if(!phone) return;
-
-  try{
-
-    const data = await ULS_DATABASE.getClient(phone);
-
-    console.log('Données client reçues :', data);
-
-    const rawPoints = data && data.points;
-
-    const points = Number(
-      String(rawPoints ?? '0')
-        .replace(/\s/g,'')
-        .replace(',','.')
-        .replace(/[^\d.-]/g,'')
-    ) || 0;
-
-    alert(
-      '📱 Numéro de téléphone : ' + phone +
-      '\n\n⭐ Points fidélité : ' + points + ' points'
-    );
-
-  }catch(error){
-
-    console.error('Erreur Mes points :', error);
-
-    alert(
-      'Une erreur est survenue : ' +
-      error.message
-    );
-
-  }
-
+  openPointsModal();
 }
 
 document.addEventListener('click',function(e){
-
   const btn = e.target.closest('[data-mes-points]');
-
   if(btn){
-
     e.preventDefault();
-
     afficherMesPoints();
-
   }
-
 });
-```
