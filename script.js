@@ -295,7 +295,7 @@ ft_explore:['Explorer','Explore','استكشف'],
 menu_close:['Fermer','Close','إغلاق']
 };
 const t=(k,v)=>{const a=T[k];let s=a?(a[LI()]||a[0]):k;if(v)for(const x in v)s=s.split('{'+x+'}').join(v[x]);return s};
-const L=a=>a[LI()]||a[0];
+const L=a=>Array.isArray(a)?(a[LI()] ?? a[0] ?? ''):(typeof a === 'string' ? a : '');
 
 /* ═════════ DONNÉES : logements (exemples à remplacer) ═════════ */
 const AM={
@@ -312,7 +312,8 @@ const revs=a=>a.reviews&&a.reviews.length?a.reviews:[0,1,2,3].map(i=>POOL[(a.see
 const rating=a=>{const r=revs(a);return r.reduce((s,x)=>s+x.r,0)/r.length};
 function normalizeAptKey(value) {
   if (!value && value !== 0) return '';
-  const s = String(value).normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase();
+  const text = Array.isArray(value) ? value.join(' ') : String(value);
+  const s = text.normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase();
   return s.replace(/&/g, ' and ').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 }
 
@@ -415,7 +416,7 @@ const galN=a=>(a.photos&&a.photos.length)?a.photos.length:5;
 // Affiche la photo n°i du logement (dossier images/) ou, à défaut, l'illustration
 function pic(a,i){
   const p=a.photos&&a.photos[i],sc=scenesFor(a)[i%5];
-  return p?'<img src="'+esc(p)+'" alt="'+esc(a.name)+'" data-sc="'+sc+'" data-seed="'+a.seed+'" decoding="async">':art(sc,a.seed);
+  return p?'<img src="'+esc(p)+'" alt="'+esc(L(a.name))+'" data-sc="'+sc+'" data-seed="'+a.seed+'" decoding="async">':art(sc,a.seed);
 }
 // Image d'un bloc en arche (config.images) ou illustration
 function blockPic(key,sc,seed){
@@ -599,9 +600,11 @@ const countLabel=(key,count)=>{
 };
 function aptCard(a){
   const r=rating(a);
-  return '<article class="apt"><div class="phw"><a class="ph" href="#/apartment/'+a.id+'" aria-label="'+esc(a.name)+'">'+pic(a,0)+'<span class="tag">'+t('type_'+a.type)+'</span></a>'+
+  const aptName = L(a.name);
+  const aptArea = L(a.area);
+  return '<article class="apt"><div class="phw"><a class="ph" href="#/apartment/'+a.id+'" aria-label="'+esc(aptName)+'">'+pic(a,0)+'<span class="tag">'+t('type_'+a.type)+'</span></a>'+
    '<button class="heart '+(favs.has(a.id)?'on':'')+'" data-fav="'+a.id+'" aria-label="'+t('save')+'">'+I.heart+'</button></div>'+
-   '<div class="cb"><h3><a href="#/apartment/'+a.id+'" style="text-decoration:none">'+esc(a.name)+'</a></h3><p class="area">'+a.area+', Casablanca</p>'+
+   '<div class="cb"><h3><a href="#/apartment/'+a.id+'" style="text-decoration:none">'+esc(aptName)+'</a></h3><p class="area">'+aptArea+', Casablanca</p>'+
    '<ul class="stats"><li>'+I.users+a.guests+' '+countLabel('u_guests',a.guests)+'</li><li>'+I.bed+a.bedrooms+' '+countLabel('u_bed',a.bedrooms)+'</li></ul>'+
    '<div class="pr"><span><b>'+money(a.price)+'</b> <span class="muted">'+t('per_night')+'</span></span><span class="rt">'+I.star+'<span>'+r.toFixed(1)+'</span></span></div><p class="price-note">'+t('price_note')+'</p><div class="card-rule"></div></div></article>';
 }
@@ -633,9 +636,11 @@ function detailView(a){
   initBooking(a);galIdx=0;
   const r=rating(a),rv=revs(a);
   const dfmt=x=>new Date(x.y,x.m-1,1).toLocaleDateString(LOC[lang],{month:'long',year:'numeric'});
-  const feats=[[t('f_capacity'),a.guests+' '+countLabel('u_guests',a.guests)],[t('f_view'),t('v_'+a.view)],[t('f_area'),a.area],[t('f_checkin'),'15:00'],[t('f_checkout'),'12:00'],[t('f_clean'),t('f_clean_v')]];
+  const aptName = L(a.name);
+  const aptArea = L(a.area);
+  const feats=[[t('f_capacity'),a.guests+' '+countLabel('u_guests',a.guests)],[t('f_view'),t('v_'+a.view)],[t('f_area'),aptArea],[t('f_checkin'),'15:00'],[t('f_checkout'),'12:00'],[t('f_clean'),t('f_clean_v')]];
   return '<div class="page dark view"><div class="wrap"><a class="back" href="#/apartments">'+I.chev+t('back')+'</a>'+
-   '<div class="d-head"><div><div class="kicker">'+t('type_'+a.type)+', '+a.area+'</div><h1 class="title" style="margin-top:8px">'+esc(a.name)+'</h1><div class="meta"><span class="st">'+I.star+'</span><b>'+r.toFixed(1)+'</b><span>('+rv.length+' '+t('reviews_n')+')</span></div></div>'+
+   '<div class="d-head"><div><div class="kicker">'+t('type_'+a.type)+', '+aptArea+'</div><h1 class="title" style="margin-top:8px">'+esc(aptName)+'</h1><div class="meta"><span class="st">'+I.star+'</span><b>'+r.toFixed(1)+'</b><span>('+rv.length+' '+t('reviews_n')+')</span></div></div>'+
    '<div class="d-act"><button class="ghost '+(favs.has(a.id)?'on':'')+'" data-fav="'+a.id+'">'+I.heart+'<span>'+(favs.has(a.id)?t('saved'):t('save'))+'</span></button><button class="ghost" id="shareBtn">'+I.share+'<span>'+t('share')+'</span></button></div></div>'+
    galleryHTML(a)+
    '<div class="d-grid"><div>'+
@@ -677,7 +682,9 @@ function bkValidate(a){
 }
 function waBooking(a){
   const c=calcStay(a,bk.in,bk.out);
-return 'Bonjour '+CONFIG.brand+',\nJe souhaite réserver :\n- Logement : '+a.name+' ('+a.area+')\n- Arrivée : '+fmtDate(bk.in)+'\n- Départ : '+fmtDate(bk.out)+'\n- Voyageurs : '+bk.guests+'\n- Durée : '+c.n+' nuit(s)\n- Total : '+c.total.toLocaleString('fr-FR')+' MAD (ménage inclus)\n- Nom : '+bk.name.trim()+'\n\nJe vous envoie la photo de ma pièce d’identité afin de confirmer ma réservation.';}
+  const aptName = L(a.name);
+  const aptArea = L(a.area);
+return 'Bonjour '+CONFIG.brand+',\nJe souhaite réserver :\n- Logement : '+aptName+' ('+aptArea+')\n- Arrivée : '+fmtDate(bk.in)+'\n- Départ : '+fmtDate(bk.out)+'\n- Voyageurs : '+bk.guests+'\n- Durée : '+c.n+' nuit(s)\n- Total : '+c.total.toLocaleString('fr-FR')+' MAD (ménage inclus)\n- Nom : '+bk.name.trim()+'\n\nJe vous envoie la photo de ma pièce d’identité afin de confirmer ma réservation.';}
 function collectBlockedDates(a){
   const blocked=new Set();
   const ranges=(a&&a.blockedDates||[]).filter(r=>r&&r.from&&r.to);
@@ -941,7 +948,7 @@ function setGal(i){
 }
 async function shareApt(){
   const a=APTS.find(x=>x.id===parse().id);const url=location.href;
-  try{if(navigator.share){await navigator.share({title:a.name+' — '+CONFIG.brand,url});return}}catch(e){if(e&&e.name==='AbortError')return}
+  try{if(navigator.share){await navigator.share({title:L(a.name)+' — '+CONFIG.brand,url});return}}catch(e){if(e&&e.name==='AbortError')return}
   try{await navigator.clipboard.writeText(url);toast(t('copied'))}catch(e){toast(url)}
 }
 document.addEventListener('input',e=>{
