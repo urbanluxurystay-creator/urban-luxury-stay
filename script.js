@@ -484,7 +484,8 @@ function stopBookingRefreshLoop(){
 const CT={name:'',msg:''};
 let simN=0,galIdx=0;
 const wa=text=>'https://wa.me/'+CONFIG.whatsapp+'?text='+encodeURIComponent(text);
-const toast=m=>{const e=$('#toast');e.textContent=m;e.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('show'),2400)};
+const toast=(m,d=2400)=>{const e=$('#toast');e.textContent=m;e.classList.add('show');clearTimeout(toast.t);if(d>0){toast.t=setTimeout(()=>e.classList.remove('show'),d)}return e};
+const hideToast=()=>{const e=$('#toast');e.classList.remove('show');clearTimeout(toast.t)};
 
 /* ═════════ HERO : modèle fourni ═════════ */
 const Hero=(()=>{
@@ -1076,9 +1077,13 @@ async function afficherMesPoints(){
   const phone = prompt('Entrez votre numéro de téléphone :');
   if(!phone) return;
 
+  toast('⏳ Chargement de vos points...', 0);
+
   try{
 
     const data = await ULS_DATABASE.getClient(phone);
+
+    hideToast();
 
 console.log('Données client reçues :', data);
 
@@ -1099,6 +1104,8 @@ alert(
 return;
 
   }catch(error){
+
+    hideToast();
 
     alert(
       'Une erreur est survenue : ' +
