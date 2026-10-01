@@ -300,6 +300,7 @@ footer p{color:#a8a8a8;max-width:34ch;margin:16px 0 0}
 .points-modal__title{font-family:var(--serif);font-size:clamp(28px,4vw,38px);margin-bottom:14px}
 .points-modal__label{display:block;color:#585858;font-size:14px;margin-bottom:8px}
 .points-modal__input{width:100%;padding:12px 14px;border:1px solid rgba(0,0,0,.2);font-size:16px;border-radius:10px;background:#fff;color:#000}
+.points-modal__status{min-height:44px;margin-top:12px;color:#1f1f1f;font-size:14px;line-height:1.5}
 .points-modal__actions{display:flex;justify-content:flex-end;gap:10px;margin-top:16px}
 .points-modal__cancel{background:transparent;border:1px solid rgba(0,0,0,.2);color:#000;padding:12px 18px}
 .points-modal__submit{padding:12px 18px}
