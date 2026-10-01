@@ -4,7 +4,34 @@ window.ULS_DATABASE = (() => {
     'https://script.google.com/macros/s/AKfycbx_7zRpxqK6amreP53BsHf2LYZ29dH9DwNQlf0rGi6tdkelcXh24bbXBpgnKDDtVWyp/exec';
 
   const clientCache = new Map();
-  const CLIENT_CACHE_MS = 30000;
+  const CLIENT_CACHE_MS = 5 * 60 * 1000;
+
+  function readCachedClient(cleanPhone) {
+    const cached = clientCache.get(cleanPhone);
+    if (cached && Date.now() - cached.time < CLIENT_CACHE_MS) {
+      return cached.data;
+    }
+
+    try {
+      const raw = sessionStorage.getItem('uls_client_' + cleanPhone);
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      if (parsed && parsed.time && Date.now() - parsed.time < CLIENT_CACHE_MS) {
+        clientCache.set(cleanPhone, { time: parsed.time, data: parsed.data });
+        return parsed.data;
+      }
+    } catch (e) {}
+
+    return null;
+  }
+
+  function writeCachedClient(cleanPhone, data) {
+    const time = Date.now();
+    clientCache.set(cleanPhone, { time, data });
+    try {
+      sessionStorage.setItem('uls_client_' + cleanPhone, JSON.stringify({ time, data }));
+    } catch (e) {}
+  }
 
   async function getClient(phone) {
 
@@ -16,12 +43,12 @@ window.ULS_DATABASE = (() => {
       throw new Error('Numéro de téléphone manquant');
     }
 
-    const cached = clientCache.get(cleanPhone);
-    const now = Date.now();
-    if (cached && now - cached.time < CLIENT_CACHE_MS) {
-      return cached.data;
+    const cached = readCachedClient(cleanPhone);
+    if (cached) {
+      return cached;
     }
 
+    const now = Date.now();
     const url =
       API_URL +
       '?phone=' +
@@ -31,7 +58,7 @@ window.ULS_DATABASE = (() => {
 
     const response = await fetch(url, {
       method: 'GET',
-      cache: 'no-store'
+      cache: 'force-cache'
     });
 
     if (!response.ok) {
@@ -48,7 +75,7 @@ window.ULS_DATABASE = (() => {
       );
     }
 
-    clientCache.set(cleanPhone, { time: now, data });
+    writeCachedClient(cleanPhone, data);
     return data;
   }
 
