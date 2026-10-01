@@ -108,9 +108,13 @@ window.ULS_DATABASE = (() => {
   let cachedBlockedDates = null;
   let blockedDatesRequest = null;
 
-  async function getBlockedDates() {
-    if (cachedBlockedDates) return cachedBlockedDates;
-    if (blockedDatesRequest) return blockedDatesRequest;
+  async function getBlockedDates(force = false) {
+    if (!force && cachedBlockedDates) return cachedBlockedDates;
+    if (!force && blockedDatesRequest) return blockedDatesRequest;
+    if (force) {
+      cachedBlockedDates = null;
+      blockedDatesRequest = null;
+    }
 
     const url = API_URL + '?action=bookings&t=' + Date.now();
     blockedDatesRequest = fetch(url, {

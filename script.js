@@ -317,13 +317,13 @@ function normalizeAptKey(value) {
   return s.replace(/&/g, ' and ').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 }
 
-async function hydrateBlockedDates(){
+async function hydrateBlockedDates(force = false){
   if(!window.ULS_DATABASE || typeof window.ULS_DATABASE.getBlockedDates !== 'function') return;
   if(blockedDatesLoading) return;
   blockedDatesLoading = true;
 
   try {
-    const remote = await window.ULS_DATABASE.getBlockedDates();
+    const remote = await window.ULS_DATABASE.getBlockedDates(force);
     if(!remote || typeof remote !== 'object') return;
 
     const aliases = {};
@@ -860,9 +860,10 @@ function render(keep){
   if(['apartments','apartment','loyalty','about','faq','contact'].indexOf(r.name)<0)Hero.show();
   renderChrome();
   if(r.name==='apartment'){
-    updateBooking();
     if (window.ULS_DATABASE && typeof window.ULS_DATABASE.getBlockedDates === 'function') {
-      hydrateBlockedDates().catch(() => {});
+      hydrateBlockedDates(true).catch(() => { const a = curApt(); if (a) updateBooking(); });
+    } else {
+      updateBooking();
     }
   }
   if(r.name==='faq')renderFAQ();
@@ -1001,10 +1002,10 @@ applyI18n();
 render(false);
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
-    hydrateBlockedDates().catch(() => {});
+    hydrateBlockedDates(true).catch(() => {});
   });
 } else {
-  hydrateBlockedDates().catch(() => {});
+  hydrateBlockedDates(true).catch(() => {});
 }
 })();
 
