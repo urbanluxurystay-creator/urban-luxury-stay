@@ -1073,57 +1073,92 @@ if (document.readyState === 'loading') {
 
 /* ═════════ MES POINTS ═════════ */
 
+function ensurePointsModal(){
+  if(document.getElementById('uls-points-modal')) return document.getElementById('uls-points-modal');
+  const modal=document.createElement('div');
+  modal.id='uls-points-modal';
+  modal.setAttribute('aria-hidden','true');
+  modal.innerHTML='<div class="points-modal__backdrop" data-points-close="true"></div><div class="points-modal" role="dialog" aria-modal="true" aria-labelledby="points-title"><div class="points-modal__title" id="points-title">Mes points</div><label class="points-modal__label" for="uls-phone-input">Numéro de téléphone</label><input id="uls-phone-input" class="points-modal__input" type="tel" inputmode="tel" autocomplete="tel" placeholder="0600000000" /><div class="points-modal__actions"><button type="button" class="ghost points-modal__cancel" data-points-close="true">Annuler</button><button type="button" class="btn solid points-modal__submit">Voir mes points</button></div></div>';
+  document.body.appendChild(modal);
+  return modal;
+}
+
+function openPointsModal(){
+  const modal=ensurePointsModal();
+  modal.classList.add('show');
+  modal.setAttribute('aria-hidden','false');
+  const input=document.getElementById('uls-phone-input');
+  setTimeout(()=>input && input.focus(),60);
+}
+
+function closePointsModal(){
+  const modal=document.getElementById('uls-points-modal');
+  if(!modal) return;
+  modal.classList.remove('show');
+  modal.setAttribute('aria-hidden','true');
+  const input=document.getElementById('uls-phone-input');
+  if(input) input.value='';
+}
+
 async function afficherMesPoints(){
+  openPointsModal();
+}
 
-  const phone = prompt('Entrez votre numéro de téléphone :');
-  if(!phone) return;
+async function submitPointsLookup(){
+  const input=document.getElementById('uls-phone-input');
+  const phone = input ? input.value.trim() : '';
+  if(!phone){
+    if(input){input.focus();}
+    return;
+  }
 
+  closePointsModal();
   toast('⏳ Chargement de vos points...', 0);
 
   try{
-
     const data = await ULS_DATABASE.getClient(phone);
-
     hideToast();
 
-console.log('Données client reçues :', data);
+    const rawPoints = data && data.points;
+    const points = Number(
+      String(rawPoints ?? '0')
+        .replace(/\s/g,'')
+        .replace(',','.')
+        .replace(/[^\d.-]/g,'')
+    ) || 0;
 
-const rawPoints = data && data.points;
-
-const points = Number(
-  String(rawPoints ?? '0')
-    .replace(/\s/g,'')
-    .replace(',','.')
-    .replace(/[^\d.-]/g,'')
-) || 0;
-
-alert(
-  '📱 Numéro de téléphone : ' + phone +
-  '\n\n⭐ Points fidélité : ' + points + ' points'
-);
-
-return;
-
+    alert('📱 Numéro de téléphone : ' + phone + '\n\n⭐ Points fidélité : ' + points + ' points');
+    return;
   }catch(error){
-
     hideToast();
-
-    alert(
-      'Une erreur est survenue : ' +
-      error.message
-    );
-
+    alert('Une erreur est survenue : ' + error.message);
   }
-
 }
 
 document.addEventListener('click',function(e){
-
   const btn = e.target.closest('[data-mes-points]');
-
   if(btn){
     e.preventDefault();
     afficherMesPoints();
+    return;
+  }
+
+  const closeBtn = e.target.closest('[data-points-close]');
+  if(closeBtn){
+    closePointsModal();
+    return;
+  }
+
+  const submitBtn = e.target.closest('.points-modal__submit');
+  if(submitBtn){
+    e.preventDefault();
+    submitPointsLookup();
+    return;
+  }
+
+  const input = e.target.closest('#uls-phone-input');
+  if(input){
+    return;
   }
 
 });
