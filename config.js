@@ -14,7 +14,7 @@ window.ULS_CONFIG={
   // Option vidéo (à la place de la photo) : videz heroImage:'' puis indiquez par ex. 'assets/hero.mp4'
   heroVideo:'',
   // Images des blocs en arche (laissez '' pour garder l'illustration)
-images:{loyalty:'',guide:'',about:'images/pages/about.jpg'},
+images:{loyalty:'images/pages/loyalty.jpg',guide:'',about:'images/pages/about.jpg'},
 // ── FAQ ──
 faq_title:[
   'FAQ',
