@@ -148,7 +148,8 @@ function clearBlockedDateSelection(apt,input,field){
 }
 
 const fmtDate=s=>{const p=s.split('-');return p[2]+'/'+p[1]+'/'+p[0]};
-const money=n=>(n).toLocaleString(lang==='fr'?'fr-FR':'en-US');
+const money=n=>(n).toLocaleString(lang==='fr'?'fr-FR':'en-US')+(lang==='ar'?' درهم':' MAD');
+const moneyPlain=n=>(n).toLocaleString(lang==='fr'?'fr-FR':'en-US');
 const ic=(p,f)=>'<svg class="ic" viewBox="0 0 24 24" fill="'+(f||'none')+'" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+p+'</svg>';
 const I={
   heart:ic('<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z"/>'),
@@ -767,7 +768,7 @@ function renderAvailabilityCalendar(a){
     const disabled = past || blockedPermanent || beforeArrival || departureOverlap;
     const clickAttr=disabled ? '' : ' data-date="'+isoKey+'"';
     const priceValue = typeof propertyNightPrice(a, isoKey) === 'number' ? propertyNightPrice(a, isoKey) : null;
-    const priceMarkup = !disabled && priceValue !== null ? '<span class="date-day__price">'+money(priceValue)+'</span>' : '';
+    const priceMarkup = !disabled && priceValue !== null ? '<span class="date-day__price">'+moneyPlain(priceValue)+'</span>' : '';
     cells.push('<button type="button" class="date-day '+(disabled?'date-day--blocked':'date-day--open')+'"'+clickAttr+' title="'+(disabled?'Indisponible':'Disponible')+'" '+(disabled?'disabled':'')+'><span class="date-day__num">'+d+'</span>'+priceMarkup+'</button>');
   }
   const monthLabel = first.toLocaleString(lang==='fr'?'fr-FR':'en-US',{month:'long',year:'numeric'});
