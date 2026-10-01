@@ -178,6 +178,7 @@ nav_apts:['Logements','Properties','العقارات'],
 nav_guide:['Guide Casablanca','Casablanca guide','دليل الدار البيضاء'],
 nav_loyalty:['Fidélité','Loyalty','الولاء'],
 my_points:['Mes points','My points','نقاطي'],
+cancel:['Annuler','Cancel','إلغاء'],
 points_phone:['Entrez votre numéro de téléphone :','Enter your phone number:','أدخل رقم هاتفك:'],
 points_none:['Aucune réservation trouvée pour ce numéro.','No reservation found for this number.','لم يتم العثور على أي حجز لهذا الرقم.'],
 points_error:['Une erreur est survenue : ','An error occurred: ','حدث خطأ: '],
@@ -672,12 +673,11 @@ function ensurePointsModal(){
       return;
     }
 
-    status.textContent = 'Recherche en cours...';
     try {
       const data = await ULS_DATABASE.getClient(phone);
       const rawPoints = data && (data.points ?? data.totalPoints ?? data.points_fidelite ?? data.userPoints ?? data.result?.points ?? data.data?.points ?? 0);
       const points = Number(String(rawPoints ?? '0').replace(/\s/g, '').replace(',', '.').replace(/[^\d.-]/g, '')) || 0;
-      status.innerHTML = '<strong>Numéro :</strong> '+esc(phone)+'<br><strong>Points :</strong> '+points;
+      status.innerHTML = '<strong>📱 Numéro :</strong> '+esc(phone)+'<br><strong>⭐ Points :</strong> '+points;
     } catch (error) {
       status.textContent = error && error.message ? error.message : 'Erreur de connexion.';
     }
@@ -1149,7 +1149,36 @@ if (document.readyState === 'loading') {
 /* ═════════ MES POINTS ═════════ */
 
 async function afficherMesPoints(){
-  openPointsModal();
+  let phone = '';
+
+  try {
+    phone = window.prompt ? window.prompt('Entrez votre numéro de téléphone :') : '';
+  } catch (error) {
+    phone = '';
+  }
+
+  if (!phone) {
+    openPointsModal();
+    return;
+  }
+
+  phone = String(phone).trim();
+  if (!phone) return;
+
+  try {
+    const data = await ULS_DATABASE.getClient(phone);
+
+    const rawPoints = data && (data.points ?? data.totalPoints ?? data.points_fidelite ?? data.userPoints ?? data.result?.points ?? data.data?.points ?? 0);
+    const points = Number(String(rawPoints ?? '0').replace(/\s/g, '').replace(',', '.').replace(/[^\d.-]/g, '')) || 0;
+
+    alert(
+      '📱 Numéro de téléphone : ' + phone +
+      '\n\n⭐ Points fidélité : ' + points + ' points'
+    );
+    return;
+  } catch (error) {
+    alert('Une erreur est survenue : ' + (error && error.message ? error.message : 'Erreur de connexion.'));
+  }
 }
 
 document.addEventListener('click',function(e){
