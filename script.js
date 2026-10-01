@@ -611,7 +611,7 @@ const ROUTES=[['home','nav_home','#/'],['apartments','nav_apts','#/apartments'],
 const parse=()=>{const p=(location.hash||'#/').slice(1).split('/').filter(Boolean);let n=p[0]||'home';if(n==='apartment'&&!p[1])n='apartments';return{name:n,id:p[1]}};
 function renderChrome(){
   const cur=parse().name==='apartment'?'apartments':parse().name;
-  const showMesPoints=['apartments','apartment','loyalty'].includes(cur);
+  const showMesPoints=['home','apartments','apartment','loyalty','about','faq','contact'].includes(cur);
   const lk=(r,cls)=>'<a href="'+r[2]+'" class="'+(cls||'')+(cur===r[0]?' on':'')+'" data-r="'+r[0]+'">'+t(r[1])+'</a>';
   const mesPoints='<button type="button" class="btn" data-mes-points>'+t('my_points')+'</button>';
   $('#nav').innerHTML='<a class="logo" href="#/" data-r="home" aria-label="'+CONFIG.brand+'"><span class="lg1">URBAN</span><span class="lg2">LUXURY STAY</span></a>'+
@@ -622,6 +622,78 @@ $('#mnav').innerHTML='<button class="x" id="mclose" aria-label="'+t('menu_close'
     '<div><h4>'+t('ct_follow')+'</h4><ul><li><a href="'+CONFIG.instagram+'" target="_blank" rel="noopener">Instagram</a></li><li><a href="'+CONFIG.tiktok+'" target="_blank" rel="noopener">TikTok</a></li><li><a href="mailto:'+CONFIG.email+'">'+esc(CONFIG.email)+'</a></li><li><a href="'+wa('')+'" target="_blank" rel="noopener">WhatsApp</a></li></ul></div></div>'+
     '<div class="f-bot"><span>© 2026 '+CONFIG.brand+'. '+t('ft_rights')+'</span><span>Casablanca</span></div></div>';
   updateNav();
+}
+
+function ensurePointsModal(){
+  let modal = document.getElementById('uls-points-modal');
+  if (modal) return modal;
+
+  modal = document.createElement('div');
+  modal.id = 'uls-points-modal';
+  modal.setAttribute('aria-hidden', 'true');
+  modal.innerHTML = '<div class="points-modal__backdrop" data-close-points-modal></div>' +
+    '<div class="points-modal" role="dialog" aria-modal="true" aria-labelledby="uls-points-title">' +
+      '<h3 class="points-modal__title" id="uls-points-title">'+t('my_points')+'</h3>' +
+      '<form id="uls-points-form" novalidate>' +
+        '<label class="points-modal__label" for="uls-points-phone">'+t('points_phone')+'</label>' +
+        '<input id="uls-points-phone" class="points-modal__input" type="tel" inputmode="tel" autocomplete="tel" placeholder="+212 6 ..." />' +
+        '<div class="points-modal__status" id="uls-points-status" aria-live="polite"></div>' +
+        '<div class="points-modal__actions">' +
+          '<button type="button" class="ghost points-modal__cancel">'+(lang==='fr'?'Annuler':(lang==='ar'?'إلغاء':'Cancel'))+'</button>' +
+          '<button type="submit" class="btn solid points-modal__submit">'+t('my_points')+'</button>' +
+        '</div>' +
+      '</form>' +
+    '</div>';
+
+  document.body.appendChild(modal);
+
+  const phoneInput = modal.querySelector('#uls-points-phone');
+  const status = modal.querySelector('#uls-points-status');
+  const form = modal.querySelector('#uls-points-form');
+
+  modal.querySelector('[data-close-points-modal]').addEventListener('click', () => {
+    modal.classList.remove('show');
+    modal.setAttribute('aria-hidden', 'true');
+    status.textContent = '';
+  });
+
+  modal.querySelector('.points-modal__cancel').addEventListener('click', () => {
+    modal.classList.remove('show');
+    modal.setAttribute('aria-hidden', 'true');
+    status.textContent = '';
+  });
+
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const phone = (phoneInput.value || '').trim();
+    if (!phone) {
+      status.textContent = t('points_phone');
+      phoneInput.focus();
+      return;
+    }
+
+    status.textContent = 'Recherche en cours...';
+    try {
+      const data = await ULS_DATABASE.getClient(phone);
+      const rawPoints = data && (data.points ?? data.totalPoints ?? data.points_fidelite ?? data.userPoints ?? data.result?.points ?? data.data?.points ?? 0);
+      const points = Number(String(rawPoints ?? '0').replace(/\s/g, '').replace(',', '.').replace(/[^\d.-]/g, '')) || 0;
+      status.innerHTML = '<strong>Numéro :</strong> '+esc(phone)+'<br><strong>Points :</strong> '+points;
+    } catch (error) {
+      status.textContent = error && error.message ? error.message : 'Erreur de connexion.';
+    }
+  });
+
+  return modal;
+}
+
+function openPointsModal(){
+  const modal = ensurePointsModal();
+  modal.classList.add('show');
+  modal.setAttribute('aria-hidden', 'false');
+  const phoneInput = modal.querySelector('#uls-points-phone');
+  const status = modal.querySelector('#uls-points-status');
+  status.textContent = '';
+  setTimeout(() => phoneInput.focus(), 50);
 }
 
 function updateNav(){$('#nav').classList.toggle('solid',parse().name!=='home'||window.scrollY>40)}
@@ -1077,27 +1149,7 @@ if (document.readyState === 'loading') {
 /* ═════════ MES POINTS ═════════ */
 
 async function afficherMesPoints(){
-  const phone = window.prompt ? window.prompt('Entrez votre numéro de téléphone :') : '';
-  if(!phone) return;
-
-  toast('⏳ Chargement de vos points...', 0);
-
-  try{
-    const data = await ULS_DATABASE.getClient(phone);
-    hideToast();
-
-    const rawPoints = data && (data.points ?? data.totalPoints ?? data.points_fidelite ?? data.userPoints ?? data.result?.points ?? data.data?.points ?? 0);
-    const points = Number(String(rawPoints ?? '0').replace(/\s/g, '').replace(',', '.').replace(/[^\d.-]/g, '')) || 0;
-
-    alert(
-      '📱 Numéro de téléphone : ' + phone +
-      '\n\n⭐ Points fidélité : ' + points + ' points'
-    );
-    return;
-  }catch(error){
-    hideToast();
-    alert('Une erreur est survenue : ' + (error && error.message ? error.message : 'Erreur de connexion.'));
-  }
+  openPointsModal();
 }
 
 document.addEventListener('click',function(e){
