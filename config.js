@@ -156,7 +156,7 @@ faq_special_a:[
 // Tant que la liste est vide, une illustration s'affiche à la place.
 // reviews (optionnel) : vos vrais avis, sous la forme {n:'Prénom N.',y:2026,m:7,r:5,x:['texte FR','texte EN','texte AR']}
 window.ULS_APTS=[
- {id:'villa-anfa-royale',name:'Villa Anfa Royale',type:'villa',area:'Anfa Ain Diab',price:4000,guests:12,bedrooms:6,beds:6,baths:9,size:550,view:'sea',hs:3,seed:8,photos:['images/apartments/villa-anfa-royale/piscine.PNG',
+ {id:'villa-anfa-royale',name:['Villa Anfa Royale','Villa Anfa Royale','فيلا أنفا رويال'],type:'villa',area:['Anfa Ain Diab','Anfa Ain Diab','أنفا عين دياب'],price:4000,guests:12,bedrooms:6,beds:6,baths:9,size:550,view:'sea',hs:3,seed:8,photos:['images/apartments/villa-anfa-royale/piscine.PNG',
   'images/apartments/villa-anfa-royale/vu1.png',
   'images/apartments/villa-anfa-royale/entrer1.PNG',
   'images/apartments/villa-anfa-royale/entrer2.PNG',
