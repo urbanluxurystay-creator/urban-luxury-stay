@@ -611,11 +611,13 @@ const ROUTES=[['home','nav_home','#/'],['apartments','nav_apts','#/apartments'],
 const parse=()=>{const p=(location.hash||'#/').slice(1).split('/').filter(Boolean);let n=p[0]||'home';if(n==='apartment'&&!p[1])n='apartments';return{name:n,id:p[1]}};
 function renderChrome(){
   const cur=parse().name==='apartment'?'apartments':parse().name;
+  const showMesPoints=['apartments','apartment','loyalty'].includes(cur);
   const lk=(r,cls)=>'<a href="'+r[2]+'" class="'+(cls||'')+(cur===r[0]?' on':'')+'" data-r="'+r[0]+'">'+t(r[1])+'</a>';
-const mesPoints='<button type="button" class="btn" data-mes-points>'+t('my_points')+'</button>';  $('#nav').innerHTML='<a class="logo" href="#/" data-r="home" aria-label="'+CONFIG.brand+'"><span class="lg1">URBAN</span><span class="lg2">LUXURY STAY</span></a>'+
-'<nav class="links" aria-label="Menu">'+ROUTES.map(r=>lk(r)).join('')+mesPoints+'</nav>'+    '<div class="nav-r"><div class="lang" role="group" aria-label="Langue">'+LANGS.map(l=>'<button data-lang="'+l+'" class="'+(l===lang?'on':'')+'" aria-pressed="'+(l===lang)+'">'+l.toUpperCase()+'</button>').join('')+'</div>'+
+  const mesPoints='<button type="button" class="btn" data-mes-points>'+t('my_points')+'</button>';
+  $('#nav').innerHTML='<a class="logo" href="#/" data-r="home" aria-label="'+CONFIG.brand+'"><span class="lg1">URBAN</span><span class="lg2">LUXURY STAY</span></a>'+
+'<nav class="links" aria-label="Menu">'+ROUTES.map(r=>lk(r)).join('')+(showMesPoints?mesPoints:'')+'</nav>'+'<div class="nav-r"><div class="lang" role="group" aria-label="Langue">'+LANGS.map(l=>'<button data-lang="'+l+'" class="'+(l===lang?'on':'')+'" aria-pressed="'+(l===lang)+'">'+l.toUpperCase()+'</button>').join('')+'</div>'+
     '<button class="burger" id="burger" aria-label="Menu">'+I.menu+'</button></div>';
-$('#mnav').innerHTML='<button class="x" id="mclose" aria-label="'+t('menu_close')+'">'+I.x+'</button>'+ROUTES.map(r=>lk(r)).join('')+mesPoints;  $('#footer').innerHTML='<div class="wrap"><div class="f-grid"><div><a class="logo" href="#/" style="align-items:flex-start" data-r="home"><span class="lg1">URBAN</span><span class="lg2">LUXURY STAY</span></a><p>'+t('ft_tag')+'</p></div>'+
+$('#mnav').innerHTML='<button class="x" id="mclose" aria-label="'+t('menu_close')+'">'+I.x+'</button>'+ROUTES.map(r=>lk(r)).join('')+(showMesPoints?mesPoints:'');  $('#footer').innerHTML='<div class="wrap"><div class="f-grid"><div><a class="logo" href="#/" style="align-items:flex-start" data-r="home"><span class="lg1">URBAN</span><span class="lg2">LUXURY STAY</span></a><p>'+t('ft_tag')+'</p></div>'+
     '<div><h4>'+t('ft_explore')+'</h4><ul>'+ROUTES.slice(1).map(r=>'<li><a href="'+r[2]+'">'+t(r[1])+'</a></li>').join('')+'</ul></div>'+
     '<div><h4>'+t('ct_follow')+'</h4><ul><li><a href="'+CONFIG.instagram+'" target="_blank" rel="noopener">Instagram</a></li><li><a href="'+CONFIG.tiktok+'" target="_blank" rel="noopener">TikTok</a></li><li><a href="mailto:'+CONFIG.email+'">'+esc(CONFIG.email)+'</a></li><li><a href="'+wa('')+'" target="_blank" rel="noopener">WhatsApp</a></li></ul></div></div>'+
     '<div class="f-bot"><span>© 2026 '+CONFIG.brand+'. '+t('ft_rights')+'</span><span>Casablanca</span></div></div>';
@@ -645,7 +647,7 @@ function aptCard(a){
    '<button class="heart '+(favs.has(a.id)?'on':'')+'" data-fav="'+a.id+'" aria-label="'+t('save')+'">'+I.heart+'</button></div>'+
    '<div class="cb"><h3><a href="#/apartment/'+a.id+'" style="text-decoration:none">'+esc(aptName)+'</a></h3><p class="area">'+aptArea+', Casablanca</p>'+
    '<ul class="stats"><li>'+I.users+a.guests+' '+countLabel('u_guests',a.guests)+'</li><li>'+I.bed+a.bedrooms+' '+countLabel('u_bed',a.bedrooms)+'</li></ul>'+
-   '<div class="pr"><span><b>'+money(a.price)+'</b> <span class="muted">'+t('per_night')+'</span></span><span class="rt">'+I.star+'<span>'+r.toFixed(1)+'</span></span></div><p class="price-note">'+t('price_note')+'</p><div class="card-rule"></div></div></article>';
+   '<div class="pr"><span><span class="muted" style="font-size:12px;display:inline-block;margin-inline-end:6px">'+t('b_from')+'</span><b>'+money(a.price)+'</b> <span class="muted">'+t('per_night')+'</span></span><span class="rt">'+I.star+'<span>'+r.toFixed(1)+'</span></span></div><p class="price-note">'+t('price_note')+'</p><div class="card-rule"></div></div></article>';
 }
 function guestOpts(max,sel){let o='';for(let i=1;i<=max;i++)o+='<option value="'+i+'"'+(i===sel?' selected':'')+'>'+i+'</option>';return o}
 
@@ -1073,46 +1075,10 @@ if (document.readyState === 'loading') {
 
 /* ═════════ MES POINTS ═════════ */
 
-function ensurePointsModal(){
-  if(document.getElementById('uls-points-modal')) return document.getElementById('uls-points-modal');
-  const modal=document.createElement('div');
-  modal.id='uls-points-modal';
-  modal.setAttribute('aria-hidden','true');
-  modal.innerHTML='<div class="points-modal__backdrop" data-points-close="true"></div><div class="points-modal" role="dialog" aria-modal="true" aria-labelledby="points-title"><div class="points-modal__title" id="points-title">Mes points</div><label class="points-modal__label" for="uls-phone-input">Numéro de téléphone</label><input id="uls-phone-input" class="points-modal__input" type="tel" inputmode="tel" autocomplete="tel" placeholder="0600000000" /><div class="points-modal__actions"><button type="button" class="ghost points-modal__cancel" data-points-close="true">Annuler</button><button type="button" class="btn solid points-modal__submit">Voir mes points</button></div></div>';
-  document.body.appendChild(modal);
-  return modal;
-}
-
-function openPointsModal(){
-  const modal=ensurePointsModal();
-  modal.classList.add('show');
-  modal.setAttribute('aria-hidden','false');
-  const input=document.getElementById('uls-phone-input');
-  setTimeout(()=>input && input.focus(),60);
-}
-
-function closePointsModal(){
-  const modal=document.getElementById('uls-points-modal');
-  if(!modal) return;
-  modal.classList.remove('show');
-  modal.setAttribute('aria-hidden','true');
-  const input=document.getElementById('uls-phone-input');
-  if(input) input.value='';
-}
-
 async function afficherMesPoints(){
-  openPointsModal();
-}
+  const phone = window.prompt('Entrez votre numéro de téléphone :');
+  if(!phone) return;
 
-async function submitPointsLookup(){
-  const input=document.getElementById('uls-phone-input');
-  const phone = input ? input.value.trim() : '';
-  if(!phone){
-    if(input){input.focus();}
-    return;
-  }
-
-  closePointsModal();
   toast('⏳ Chargement de vos points...', 0);
 
   try{
@@ -1127,11 +1093,17 @@ async function submitPointsLookup(){
         .replace(/[^\d.-]/g,'')
     ) || 0;
 
-    alert('📱 Numéro de téléphone : ' + phone + '\n\n⭐ Points fidélité : ' + points + ' points');
+    alert(
+      '📱 Numéro de téléphone : ' + phone +
+      '\n\n⭐ Points fidélité : ' + points + ' points'
+    );
     return;
   }catch(error){
     hideToast();
-    alert('Une erreur est survenue : ' + error.message);
+    alert(
+      'Une erreur est survenue : ' +
+      error.message
+    );
   }
 }
 
@@ -1140,25 +1112,5 @@ document.addEventListener('click',function(e){
   if(btn){
     e.preventDefault();
     afficherMesPoints();
-    return;
   }
-
-  const closeBtn = e.target.closest('[data-points-close]');
-  if(closeBtn){
-    closePointsModal();
-    return;
-  }
-
-  const submitBtn = e.target.closest('.points-modal__submit');
-  if(submitBtn){
-    e.preventDefault();
-    submitPointsLookup();
-    return;
-  }
-
-  const input = e.target.closest('#uls-phone-input');
-  if(input){
-    return;
-  }
-
 });
