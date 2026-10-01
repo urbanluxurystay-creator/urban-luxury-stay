@@ -825,8 +825,6 @@ function renderFAQ(){
 
   const faqs=[
     ['faq_how','faq_how_a'],
-    ['faq_cancel','faq_cancel_a'],
-    ['faq_modify','faq_modify_a'],
     ['faq_times','faq_times_a'],
     ['faq_methods','faq_methods_a'],
     ['faq_fees','faq_fees_a'],
