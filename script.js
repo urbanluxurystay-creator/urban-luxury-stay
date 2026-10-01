@@ -317,6 +317,23 @@ function normalizeAptKey(value) {
   return s.replace(/&/g, ' and ').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 }
 
+function mergeRemoteBlockedDatesForApt(apt, remote){
+  if(!apt || !remote || typeof remote !== 'object') return Array.isArray(apt && apt.blockedDates) ? apt.blockedDates : [];
+  const local = Array.isArray(apt.blockedDates) ? apt.blockedDates : [];
+  const keys = [apt.id, apt.name, normalizeAptKey(apt.id), normalizeAptKey(apt.name)];
+  const incoming = keys.flatMap(key => remote[key] || []).concat(
+    Object.entries(remote).flatMap(([k, items]) => normalizeAptKey(k) === normalizeAptKey(apt.id) || normalizeAptKey(k) === normalizeAptKey(apt.name) ? (items || []) : [])
+  ).map(item => ({
+    from: String(item.from || item.start || '').slice(0, 10),
+    to: String(item.to || item.end || '').slice(0, 10)
+  })).filter(item => item.from && item.to);
+
+  return [...local, ...incoming]
+    .map(normalizeBlockedRange)
+    .filter(Boolean)
+    .sort((a, b) => a.from.localeCompare(b.from));
+}
+
 async function hydrateBlockedDates(force = false){
   if(!window.ULS_DATABASE || typeof window.ULS_DATABASE.getBlockedDates !== 'function') return;
   if(blockedDatesLoading) return;
@@ -326,27 +343,8 @@ async function hydrateBlockedDates(force = false){
     const remote = await window.ULS_DATABASE.getBlockedDates(force);
     if(!remote || typeof remote !== 'object') return;
 
-    const aliases = {};
     APTS.forEach(apt => {
-      aliases[normalizeAptKey(apt.id)] = apt.id;
-      aliases[normalizeAptKey(apt.name)] = apt.id;
-    });
-
-    APTS.forEach(apt => {
-      const local = Array.isArray(apt.blockedDates) ? apt.blockedDates : [];
-      const keys = [apt.id, apt.name, normalizeAptKey(apt.id), normalizeAptKey(apt.name)];
-      const incoming = keys.flatMap(key => remote[key] || []).concat(
-        Object.entries(remote).flatMap(([k, items]) => normalizeAptKey(k) === normalizeAptKey(apt.id) || normalizeAptKey(k) === normalizeAptKey(apt.name) ? (items || []) : [])
-      ).map(item => ({
-        from: String(item.from || item.start || '').slice(0, 10),
-        to: String(item.to || item.end || '').slice(0, 10)
-      })).filter(item => item.from && item.to);
-
-      const merged = [...local, ...incoming]
-        .map(normalizeBlockedRange)
-        .filter(Boolean)
-        .sort((a, b) => a.from.localeCompare(b.from));
-      apt.blockedDates = merged;
+      apt.blockedDates = mergeRemoteBlockedDatesForApt(apt, remote);
     });
 
     const a = typeof curApt === 'function' ? curApt() : null;
@@ -356,6 +354,20 @@ async function hydrateBlockedDates(force = false){
     }
   } finally {
     blockedDatesLoading = false;
+  }
+}
+
+async function recheckBookingAvailability(){
+  const a = curApt();
+  if(!a || !window.ULS_DATABASE || typeof window.ULS_DATABASE.getBlockedDates !== 'function') return true;
+
+  try {
+    const remote = await window.ULS_DATABASE.getBlockedDates(true);
+    a.blockedDates = mergeRemoteBlockedDatesForApt(a, remote || {});
+    renderAvailabilityCalendar(a);
+    return !isBlocked(a, bk.in, bk.out) && !(bk.in && bk.out && overlapsBlockedRange(a, bk.in, bk.out));
+  } catch (error) {
+    return true;
   }
 }
 
@@ -443,7 +455,25 @@ let gcat='all';
 let bk={aptId:null,in:'',out:'',guests:2,name:'',file:null,idUrl:null,tried:false};
 let bookingMonth = new Date();
 let blockedDatesLoading = false;
+let bookingRefreshTimer = null;
 bookingMonth.setDate(1);
+
+function startBookingRefreshLoop(){
+  if(bookingRefreshTimer) return;
+  bookingRefreshTimer = setInterval(() => {
+    if(parse().name !== 'apartment') return;
+    const a = curApt();
+    if(!a) return;
+    hydrateBlockedDates(true).catch(() => {});
+  }, 15000);
+}
+
+function stopBookingRefreshLoop(){
+  if(bookingRefreshTimer){
+    clearInterval(bookingRefreshTimer);
+    bookingRefreshTimer = null;
+  }
+}
 const CT={name:'',msg:''};
 let simN=0,galIdx=0;
 const wa=text=>'https://wa.me/'+CONFIG.whatsapp+'?text='+encodeURIComponent(text);
@@ -728,9 +758,11 @@ function renderAvailabilityCalendar(a){
     const departureOverlap = selectingOut && bk.in && overlapsBlockedRange(a, bk.in, isoKey);
     const disabled = past || blockedPermanent || beforeArrival || departureOverlap;
     const clickAttr=disabled ? '' : ' data-date="'+isoKey+'"';
-    cells.push('<button type="button" class="date-day '+(disabled?'date-day--blocked':'date-day--open')+'"'+clickAttr+' title="'+(disabled?'Indisponible':'Disponible')+'" '+(disabled?'disabled':'')+'>'+d+'</button>');
+    const priceValue = typeof propertyNightPrice(a, isoKey) === 'number' ? propertyNightPrice(a, isoKey) : null;
+    const priceMarkup = !disabled && priceValue !== null ? '<span class="date-day__price">'+money(priceValue)+'</span>' : '';
+    cells.push('<button type="button" class="date-day '+(disabled?'date-day--blocked':'date-day--open')+'"'+clickAttr+' title="'+(disabled?'Indisponible':'Disponible')+'" '+(disabled?'disabled':'')+'><span class="date-day__num">'+d+'</span>'+priceMarkup+'</button>');
   }
-  const monthLabel = first.toLocaleDateString(lang==='fr'?'fr-FR':'en-US',{month:'long',year:'numeric'});
+  const monthLabel = first.toLocaleString(lang==='fr'?'fr-FR':'en-US',{month:'long',year:'numeric'});
   const days=['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
   cal.innerHTML='<div class="date-calendar__nav"><button type="button" class="date-month-arrow" data-cal-nav="-1" aria-label="Mois précédent">‹</button><div class="date-calendar__month">'+monthLabel+'</div><button type="button" class="date-month-arrow" data-cal-nav="1" aria-label="Mois suivant">›</button></div><div class="date-calendar__header">'+days.map(d=>'<span>'+d+'</span>').join('')+'</div><div class="date-calendar__grid">'+cells.join('')+'</div>';
 }
@@ -860,11 +892,14 @@ function render(keep){
   if(['apartments','apartment','loyalty','about','faq','contact'].indexOf(r.name)<0)Hero.show();
   renderChrome();
   if(r.name==='apartment'){
+    startBookingRefreshLoop();
     if (window.ULS_DATABASE && typeof window.ULS_DATABASE.getBlockedDates === 'function') {
       hydrateBlockedDates(true).catch(() => { const a = curApt(); if (a) updateBooking(); });
     } else {
       updateBooking();
     }
+  } else {
+    stopBookingRefreshLoop();
   }
   if(r.name==='faq')renderFAQ();
 }
@@ -920,7 +955,6 @@ if(nl){e.preventDefault();document.body.classList.remove('menu-open');location.h
   const sd=tg.closest('#bkSend');
 
 if(sd){
-
   const a=curApt();
   const err=a&&bkValidate(a);
 
@@ -933,9 +967,25 @@ if(sd){
 
   e.preventDefault();
 
-  window.open(wa(waBooking(a)), '_blank');
+  (async () => {
+    const stillAvailable = await recheckBookingAvailability();
+    if(!stillAvailable){
+      bk.tried=true;
+      $('#bkErr').textContent=t('e_unavailable');
+      updateBooking();
+      return;
+    }
 
-  $('#bkAfter').innerHTML='<div class="ok-note">'+t('b_after')+'</div>';
+    const finalErr = a && bkValidate(a);
+    if(finalErr){
+      bk.tried=true;
+      updateBooking();
+      return;
+    }
+
+    window.open(wa(waBooking(a)), '_blank');
+    $('#bkAfter').innerHTML='<div class="ok-note">'+t('b_after')+'</div>';
+  })();
 
   return;
 }

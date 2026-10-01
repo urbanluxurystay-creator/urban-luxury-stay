@@ -204,10 +204,13 @@ html[dir=rtl] .hero #hHint{letter-spacing:.05em}
 .date-calendar__header,.date-calendar__grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
 .date-calendar__header{margin-bottom:8px;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:#6b6b6b}
 .date-calendar__header span,.date-day,.date-empty{text-align:center;padding:7px 0;border-radius:4px}
-.date-day{display:block;background:#fff;border:1px solid rgba(0,0,0,.08);font-size:12px;color:#1d1d1d;cursor:pointer;transition:all .2s ease;position:relative}
+.date-day{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:#fff;border:1px solid rgba(0,0,0,.08);font-size:12px;color:#1d1d1d;cursor:pointer;transition:all .2s ease;position:relative;min-height:72px;padding:8px 4px}
 .date-day:hover{border-color:var(--gold);background:#f6f0e0}
+.date-day__num{display:block;line-height:1.1;font-size:12px;font-weight:600}
+.date-day__price{display:block;line-height:1.2;font-size:9.5px;color:#6a5c3f;white-space:nowrap}
 .date-day--blocked{background:#e7e5e1;color:#8b8b8b;border-color:#d7d2ca;cursor:not-allowed;text-decoration:line-through;text-decoration-thickness:2px;position:relative}
 .date-day--blocked::after{content:"";position:absolute;left:10%;right:10%;top:50%;height:1.5px;background:rgba(78,64,42,.8);transform:translateY(-50%) rotate(-12deg);border-radius:999px}
+.date-day--blocked .date-day__price{display:none}
 .date-day--open{background:#f1efe9}
 .date-empty{display:block;background:transparent;border:1px solid transparent}
 .book .field{margin-bottom:12px}

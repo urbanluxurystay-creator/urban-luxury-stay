@@ -156,7 +156,7 @@ faq_special_a:[
 // Tant que la liste est vide, une illustration s'affiche à la place.
 // reviews (optionnel) : vos vrais avis, sous la forme {n:'Prénom N.',y:2026,m:7,r:5,x:['texte FR','texte EN','texte AR']}
 window.ULS_APTS=[
- {id:'villa-anfa-royale',name:['Villa Anfa Royale','Villa Anfa Royale','فيلا أنفا رويال'],type:'villa',area:['Anfa Ain Diab','Anfa Ain Diab','أنفا عين دياب'],price:4000,guests:12,bedrooms:6,beds:6,baths:9,size:550,view:'sea',hs:3,seed:8,photos:['images/apartments/villa-anfa-royale/piscine.PNG',
+ {id:'villa-anfa-royale',name:['Villa Anfa Royale','Villa Anfa Royale','فيلا أنفا رويال'],type:'villa',area:['Anfa Ain Diab','Anfa Ain Diab','أنفا عين دياب'],price:4000,weekendPrice:4500,guests:12,bedrooms:6,beds:6,baths:9,size:550,view:'sea',hs:3,seed:8,photos:['images/apartments/villa-anfa-royale/piscine.PNG',
   'images/apartments/villa-anfa-royale/vu1.png',
   'images/apartments/villa-anfa-royale/entrer1.PNG',
   'images/apartments/villa-anfa-royale/entrer2.PNG',
@@ -187,7 +187,7 @@ window.ULS_APTS=[
   blockedDates:[],
   desc:['Villa contemporaine dans le quartier résidentiel d’Anfa, avec piscine privée et jardin paysager. Idéale pour les familles et les séjours entre amis, avec un service digne d’un palace.','A contemporary villa in the residential district of Anfa, with a private pool and landscaped garden. Ideal for families and stays with friends, with palace-level service.','فيلا عصرية في حي أنفا السكني، بمسبح خاص وحديقة منسقة. مثالية للعائلات والإقامات مع الأصدقاء، بخدمة بمستوى القصور.'],
   am:['wifi','ac','pool','garden','kitchen','parking','concierge','washer','tv','linen','elevator','security']},
-{id:'suite-corniche-ocean',name:['Studio Naïa','Studio Naïa','استوديو نايا'],type:'apartment',area:['Les Princesses','Les Princesses','الأميرات'],price:600,guests:3,bedrooms:1,beds:1,baths:1,size:75,view:'city',hs:1,seed:1,photos:['images/apartments/suite-corniche-ocean/chambre3.jpg',
+{id:'suite-corniche-ocean',name:['Studio Naïa','Studio Naïa','استوديو نايا'],type:'apartment',area:['Les Princesses','Les Princesses','الأميرات'],price:600,weekendPrice:700,guests:3,bedrooms:1,beds:1,baths:1,size:75,view:'city',hs:1,seed:1,photos:['images/apartments/suite-corniche-ocean/chambre3.jpg',
   'images/apartments/suite-corniche-ocean/salon.jpg',
   'images/apartments/suite-corniche-ocean/entrer.PNG',
   'images/apartments/suite-corniche-ocean/cuisine.jpg',
