@@ -253,6 +253,7 @@ b_cap:['Capacité maximale : {n} voyageurs. Ménage inclus.','Maximum capacity: 
 b_nights:['{n} nuit(s) × {p}','{n} night(s) × {p}','{n} ليلة × {p}'],
 b_total:['Total','Total','المجموع'],
 b_name:['Nom complet','Full name','الاسم الكامل'],
+b_phone:['Numéro de téléphone','Phone number','رقم الهاتف'],
 b_send:['Confirmer sur WhatsApp','Confirm on WhatsApp','التأكيد عبر واتساب'],
 b_nopay:['Aucun paiement en ligne : la réservation se confirme sur WhatsApp.','No online payment: the booking is confirmed on WhatsApp.','لا دفع عبر الإنترنت: يتم تأكيد الحجز عبر واتساب.'],
 b_pts:['Ce séjour vous fait gagner {n} point(s) fidélité.','This stay earns you {n} loyalty point(s).','هذه الإقامة تمنحك {n} نقطة ولاء.'],
@@ -261,6 +262,7 @@ price_note:['Tarifs plus élevés le week-end, en haute saison et lors de certai
 e_unavailable:['Ces dates sont déjà réservées pour ce logement. Choisissez d’autres dates.','These dates are already booked for this stay. Please choose other dates.','هذه التواريخ محجوزة بالفعل لهذا المسكن. اختر تواريخ أخرى.'],
 e_guests:['Le nombre de voyageurs dépasse la capacité du logement.','The number of guests exceeds the capacity.','عدد المسافرين يتجاوز سعة المسكن.'],
 e_name:['Indiquez votre nom complet.','Enter your full name.','أدخل اسمك الكامل.'],
+e_phone:['Indiquez votre numéro de téléphone.','Enter your phone number.','أدخل رقم هاتفك.'],
 e_id:['Ajoutez la photo de votre carte nationale.','Add a photo of your national ID card.','أضف صورة بطاقتك الوطنية.'],
 b_after:['WhatsApp s’ouvre avec votre demande. Joignez la photo de votre carte nationale dans la conversation.','WhatsApp opens with your request. Attach your ID photo in the conversation.','يُفتح واتساب بطلبك. أرفق صورة بطاقتك في المحادثة.'],
 b_shareid:['Envoyer la photo par WhatsApp','Send the photo via WhatsApp','إرسال الصورة عبر واتساب'],
@@ -461,7 +463,7 @@ const saveFavs=()=>{try{localStorage.setItem('uls_favs',JSON.stringify([...favs]
 const S={in:'',out:'',guests:2};
 const F={type:'all',guests:1,fav:false};
 let gcat='all';
-let bk={aptId:null,in:'',out:'',guests:2,name:'',file:null,idUrl:null,tried:false};
+let bk={aptId:null,in:'',out:'',guests:2,name:'',phone:'',file:null,idUrl:null,tried:false};
 let bookingMonth = new Date();
 let blockedDatesLoading = false;
 let bookingRefreshTimer = null;
@@ -769,7 +771,7 @@ function detailView(a){
 function initBooking(a){
   if(bk.aptId!==a.id){
     if(bk.idUrl){try{URL.revokeObjectURL(bk.idUrl)}catch(e){}}
-    bk={aptId:a.id,in:S.in||'',out:S.out||'',guests:Math.min(S.guests||2,a.guests),name:bk.name||'',file:null,idUrl:null,tried:false};
+    bk={aptId:a.id,in:S.in||'',out:S.out||'',guests:Math.min(S.guests||2,a.guests),name:bk.name||'',phone:bk.phone||'',file:null,idUrl:null,tried:false};
   }
 }
 function bookingHTML(a){
@@ -779,6 +781,7 @@ function bookingHTML(a){
    '<div class="date-calendar" id="bkCalendar"></div>'+
    '<div class="field"><label>'+t('s_guests')+'<select id="bkGuests">'+guestOpts(a.guests,bk.guests)+'</select></label><p class="hint">'+t('b_cap',{n:a.guests})+'</p></div>'+
    '<div class="field"><label>'+t('b_name')+'<input id="bkName" autocomplete="name" value="'+esc(bk.name)+'"></label></div>'+
+   '<div class="field"><label>'+t('b_phone')+'<input id="bkPhone" type="tel" inputmode="tel" autocomplete="tel" value="'+esc(bk.phone)+'"></label></div>'+
    '<img id="bkImg" alt="" '+(bk.idUrl?'src="'+bk.idUrl+'"':'hidden')+'>'+
    '<div class="lines" id="bkLines"></div>'+
    '<p class="err" id="bkErr" role="alert"></p>'+
@@ -792,13 +795,14 @@ function bkValidate(a){
   if(isBlocked(a,bk.in,bk.out))return'e_unavailable';
   if(bk.guests<1||bk.guests>a.guests)return'e_guests';
   if(!bk.name.trim())return'e_name';
+  if(!bk.phone.trim())return'e_phone';
   return null;
 }
 function waBooking(a){
   const c=calcStay(a,bk.in,bk.out);
   const aptName = L(a.name);
   const aptArea = L(a.area);
-return 'Bonjour '+CONFIG.brand+',\nJe souhaite réserver :\n- Logement : '+aptName+' ('+aptArea+')\n- Arrivée : '+fmtDate(bk.in)+'\n- Départ : '+fmtDate(bk.out)+'\n- Voyageurs : '+bk.guests+'\n- Durée : '+c.n+' nuit(s)\n- Total : '+c.total.toLocaleString('fr-FR')+' MAD (ménage inclus)\n- Nom : '+bk.name.trim()+'\n\nJe vous envoie la photo de ma pièce d’identité afin de confirmer ma réservation.';}
+return 'Bonjour '+CONFIG.brand+',\nJe souhaite réserver :\n- Logement : '+aptName+' ('+aptArea+')\n- Arrivée : '+fmtDate(bk.in)+'\n- Départ : '+fmtDate(bk.out)+'\n- Voyageurs : '+bk.guests+'\n- Durée : '+c.n+' nuit(s)\n- Total : '+c.total.toLocaleString('fr-FR')+' MAD (ménage inclus)\n- Nom : '+bk.name.trim()+'\n- Téléphone : '+bk.phone.trim()+'\n\nJe vous envoie la photo de ma pièce d’identité afin de confirmer ma réservation.';}
 function collectBlockedDates(a){
   const blocked=new Set();
   const ranges=(a&&a.blockedDates||[]).filter(r=>r&&r.from&&r.to);
@@ -1127,6 +1131,7 @@ document.addEventListener('input',e=>{
     bk.out=e.target.value;S.out=bk.out;updateBooking()
   }
   else if(id==='bkName'){bk.name=e.target.value;updateBooking()}
+  else if(id==='bkPhone'){bk.phone=e.target.value;updateBooking()}
   else if(id==='simRange'){simN=+e.target.value;const s=simHTML();const simNEl=$('#simN');if(simNEl) simNEl.textContent=simN;$('#simPts').textContent=s.pts;$('#simBar').style.width=s.pct+'%';$('#simMsg').textContent=s.msg;$$('#ladder li').forEach(li=>li.classList.toggle('on',s.pts>=+li.dataset.p))}
   else if(id==='cName'){CT.name=e.target.value;$('#cSend').href=wa(waContact())}
   else if(id==='cMsg'){CT.msg=e.target.value;$('#cSend').href=wa(waContact())}
