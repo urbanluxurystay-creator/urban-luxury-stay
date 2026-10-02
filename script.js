@@ -1054,6 +1054,12 @@ if(sd){
 
   e.preventDefault();
 
+  const waUrl = wa(waBooking(a));
+  const popup = window.open(waUrl, '_blank');
+  if(!popup){
+    window.location.href = waUrl;
+  }
+
   (async () => {
     const stillAvailable = await recheckBookingAvailability();
     if(!stillAvailable){
@@ -1070,7 +1076,6 @@ if(sd){
       return;
     }
 
-    window.open(wa(waBooking(a)), '_blank');
     $('#bkAfter').innerHTML='<div class="ok-note">'+t('b_after')+'</div>';
   })();
 
