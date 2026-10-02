@@ -95,9 +95,9 @@ faq_methods:[
 ],
 
 faq_methods_a:[
-  'Nous acceptons le virement bancaire, la carte bancaire via un lien sécurisé et le paiement en espèces à l’arrivée. Un acompte de 30 % est demandé à la réservation.',
-  'We accept bank transfer, credit or debit card via a secure payment link, and cash payment upon arrival. A 30% deposit is required at the time of booking.',
-  'نقبل التحويل البنكي، والبطاقة البنكية عبر رابط دفع آمن، والدفع نقداً عند الوصول. يُطلب دفع عربون بنسبة 30% عند الحجز.'
+  'Nous acceptons le virement bancaire, la carte bancaire via un lien sécurisé et le paiement en espèces à l’arrivée. Un acompte de 30 % (non remboursable) est demandé à la réservation.',
+  'We accept bank transfer, credit or debit card via a secure payment link, and cash payment upon arrival. A 30% deposit (non-refundable) is required at the time of booking.',
+  'نقبل التحويل البنكي، والبطاقة البنكية عبر رابط دفع آمن، والدفع نقداً عند الوصول. يُطلب دفع عربون بنسبة 30% (غير قابل للاسترداد) عند الحجز.'
 ],
 
 faq_fees:[
