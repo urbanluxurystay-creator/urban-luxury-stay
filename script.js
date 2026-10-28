@@ -312,7 +312,7 @@ const L=a=>Array.isArray(a)?(a[LI()] ?? a[0] ?? ''):(typeof a === 'string' ? a :
 const AM={
  wifi:['Wi-Fi fibre','Fibre Wi-Fi','واي فاي ألياف'],ac:['Climatisation','Air conditioning','تكييف'],pool:['Piscine privée','Private pool','مسبح خاص'],
  kitchen:['Cuisine équipée','Fully equipped kitchen','مطبخ مجهز'],parking:['Parking privé','Private parking','موقف خاص'],elevator:['Ascenseur','Elevator','مصعد'],
- tv:['Smart TV et streaming','Smart TV and streaming','تلفاز ذكي وبث'],washer:['Lave-linge','Washing machine','غسالة'],gym:['Salle de sport','Gym','قاعة رياضة'],
+ tv:['Smart TV et streaming','Smart TV and streaming','تلفاز ذكي وبث'],projector:['Projecteur vidéo','Video projector','جهاز عرض فيديو'],washer:['Lave-linge','Washing machine','غسالة'],gym:['Salle de sport','Gym','قاعة رياضة'],
  concierge:['Conciergerie','Concierge','كونسييرج'],security:['Sécurité 24h/24','24/7 security','أمن على مدار الساعة'],terrace:['Terrasse','Terrace','تراس'],
  garden:['Jardin paysager','Landscaped garden','حديقة منسقة'],breakfast:['Petit-déjeuner sur demande','Breakfast on request','فطور عند الطلب'],coffee:['Machine à café','Coffee machine','ماكينة قهوة'],
  linen:['Linge de maison hôtelier','Hotel-grade linens','مفروشات بمعايير فندقية'],safe:['Coffre-fort','Safe','خزنة'],bbq:['Barbecue','Barbecue','شواء']
