@@ -281,7 +281,7 @@ l_rewards:['Vos récompenses','Your rewards','مكافآتك'],
 r100:['Bon d’achat de 50 DH',' 50 MAD gift voucher','نقطة: قسيمة شراء بقيمة 50 درهم'],
 r300:['Bon d’achat de 200 DH',' 200 MAD gift voucher',' نقطة: قسيمة شراء بقيمة 200 درهم'],
 r1000:['Nuit gratuite dans le studio de votre choix','One free night in the studio of your choice',' نقطة: ليلة مجانية في الاستوديو الذي تختاره'],
-r3000:['Transport gratuit de l’aéroport au bien réservé (entre 14h et 23h aller)','Free airport transfer to the reserved property (outbound between 2 PM and 11 PM)',' نقطة: انتقال مجاني من المطار إلى العقار المحجوز (ذهابًا بين 14:00 و23:00)'],
+r3000:['Trasnfet gratuit de l’aéroport au bien réservé (entre 14h et 23h aller)','Free airport transfer to the reserved property (outbound between 2 PM and 11 PM)',' نقطة: انتقال مجاني من المطار إلى العقار المحجوز (ذهابًا بين 14:00 و23:00)'],
 l_pts:['pts','pts','نقطة'],l_unlocked:['Débloqué','Unlocked','مفتوح'],
 l_sim:['Calculez vos points','Calculate your points','احسب نقاطك'],
 l_nights:['Nuits séjournées','Nights stayed','الليالي المقضاة'],
@@ -763,7 +763,7 @@ function detailView(a){
     '<div class="d-sec"><ul class="facts"><li>'+I.users+a.guests+' '+countLabel('u_guests',a.guests)+'</li><li>'+I.bed+a.bedrooms+' '+countLabel('u_bed',a.bedrooms)+'</li><li>'+I.bed+a.beds+' '+countLabel('u_beds',a.beds)+'</li><li>'+I.bath+a.baths+' '+countLabel('u_bath',a.baths)+'</li></ul><h2>'+t('about_stay')+'</h2><p>'+L(a.desc)+'</p></div>'+
     '<div class="d-sec"><h2>'+t('d_features')+'</h2><div class="feat">'+feats.map(f=>'<div><span>'+f[0]+'</span><b style="font-weight:500">'+f[1]+'</b></div>').join('')+'</div></div>'+
     '<div class="d-sec"><h2>'+t('d_amen')+'</h2><ul class="amen">'+a.am.map(k=>'<li>'+L(AM[k])+'</li>').join('')+'</ul></div>'+
-    '<div class="d-sec"><h2>'+t('d_reviews')+'</h2><div class="rv-sum"><b>'+r.toFixed(1)+'</b><span class="muted">'+rv.length+' '+t('reviews_n')+'</span></div>'+
+    '<div class="d-sec"><h2>'+t('d_reviews')+'</h2><div class="rv-sum"><b>'+r.toFixed(1)+'</b><span class="muted">'+rv.length+' '+t('reviews_n')+')</span></div>'+
      rv.map(x=>'<div class="rev"><div class="rev-h"><b>'+x.n+'</b><span>'+dfmt(x)+'</span></div><div class="st" aria-label="'+x.r+'/5">'+'★'.repeat(x.r)+'<span style="opacity:.25">'+'★'.repeat(5-x.r)+'</span></div><p>'+L(x.x)+'</p></div>').join('')+'</div>'+
    '</div><aside class="book" id="book">'+bookingHTML(a)+'</aside></div></div>'+
    '<div class="mbar"><div><span class="muted" style="font-size:13px">'+t('b_from')+'</span><br><b>'+money(a.price)+'</b> <span class="muted">'+t('per_night')+'</span></div><a class="btn solid" href="#book" data-goto="book">'+t('b_title')+'</a></div></div>';
@@ -924,7 +924,7 @@ function loyaltyView(){
    '<div class="loy"><div><h2 class="h3">'+t('l_rewards')+'</h2><ul class="ladder" id="ladder">'+REWARDS.map(r=>'<li data-p="'+r.p+'" class="'+(s.pts>=r.p?'on':'')+'"><span class="pt">'+r.p+'<small>'+t('l_pts')+'</small></span><span>'+t(r.k)+'</span><span class="ck">'+t('l_unlocked')+'</span></li>').join('')+'</ul></div>'+
    '<div class="sim"><h2 class="h3" style="margin-bottom:24px">'+t('l_sim')+'</h2><label for="simRange"><span>'+t('l_nights')+'</span></label><input type="range" id="simRange" min="0" max="300" value="'+simN+'">'+
    '<div class="big" id="simPts">'+s.pts+'</div><div class="muted">'+t('l_yours')+'</div><div class="bar"><i id="simBar" style="width:'+s.pct+'%"></i></div><p class="msg" id="simMsg">'+s.msg+'</p>'+
-'<p class="hint muted" style="font-size:14px;margin-top:14px">'+t('l_note')+'</p></div></div></div></div>';}
+'<p class="hint muted" style="font-size:14px;margin-top:14px>'+t('l_note')+'</p></div></div></div></div>';}
 function aboutView(){
   return '<div class="page light view"><div class="wrap"><div class="band" style="align-items:start"><div class="prose"><div class="rule"></div><h1 class="title" style="margin-bottom:34px">'+t('a_h')+'</h1><p>'+t('a_p1')+'</p><p>'+t('a_p2')+'</p></div><div class="arch">'+blockPic('about',0,14)+'</div></div>'+
    '<div class="vals">'+[1,2,3,4].map(i=>'<div class="val"><h3>'+t('v'+i)+'</h3><p>'+t('v'+i+'t')+'</p></div>').join('')+'</div></div></div>';
