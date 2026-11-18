@@ -281,7 +281,7 @@ l_rewards:['Vos récompenses','Your rewards','مكافآتك'],
 r100:['Bon d’achat de 50 DH',' 50 MAD gift voucher','نقطة: قسيمة شراء بقيمة 50 درهم'],
 r300:['Bon d’achat de 200 DH',' 200 MAD gift voucher',' نقطة: قسيمة شراء بقيمة 200 درهم'],
 r1000:['Nuit gratuite dans le studio de votre choix','One free night in the studio of your choice',' نقطة: ليلة مجانية في الاستوديو الذي تختاره'],
-r3000:['Trasnfet gratuit de l’aéroport au bien réservé (entre 14h et 23h aller)','Free airport transfer to the reserved property (outbound between 2 PM and 11 PM)',' نقطة: انتقال مجاني من المطار إلى العقار المحجوز (ذهابًا بين 14:00 و23:00)'],
+r3000:['Transfert gratuit de l’aéroport au bien réservé (entre 14h et 23h aller)','Free airport transfer to the reserved property (outbound between 2 PM and 11 PM)',' نقطة: انتقال مجاني من المطار إلى العقار المحجوز (ذهابًا بين 14:00 و23:00)'],
 l_pts:['pts','pts','نقطة'],l_unlocked:['Débloqué','Unlocked','مفتوح'],
 l_sim:['Calculez vos points','Calculate your points','احسب نقاطك'],
 l_nights:['Nuits séjournées','Nights stayed','الليالي المقضاة'],
@@ -728,7 +728,7 @@ function guestOpts(max,sel){let o='';for(let i=1;i<=max;i++)o+='<option value="'
 
 function homeView(){
   return '<div class="view">'+
-  '<section class="sec dark" style="padding-top:clamp(56px,7vw,96px)"><div class="wrap"><div class="rule"></div><h2 class="title" style="margin-bottom:clamp(36px,5vw,64px)">'+t('feat_title')+'</h2><div class="filters">'+['all','apartment','villa'].map(k=>'<button class="chip '+(k==='all'?'on':'')+'" data-type="'+k+'">'+t('f_'+k)+'</button>').join('')+'<button class="chip" data-favf="1">'+I.heart+t('f_fav')+'</button></div><div class="grid">'+APTS.filter(a=>(F.type==='all'||a.type===F.type)&&(!F.fav||favs.has(a.id))).map(aptCard).join('')+'</div></div></section>'+
+  '<section class="sec dark" style="padding-top:clamp(56px,7vw,96px)"><div class="wrap"><div class="rule"></div><h2 class="title" style="margin-bottom:clamp(36px,5vw,64px)">'+t('feat_title')+'</h2><div class="filters">'+['all','apartment','villa'].map(k=>'<button class="chip '+( k==='all'?'on':'')+'" data-type="'+k+'">'+t('f_'+k)+'</button>').join('')+'<button class="chip" data-favf="1">'+I.heart+t('f_fav')+'</button></div><div class="grid">'+APTS.filter(a=>(F.type==='all'||a.type===F.type)&&(!F.fav||favs.has(a.id))).map(aptCard).join('')+'</div></div></section>'+
   '<section class="sec light"><div class="wrap"><div class="rule"></div><h2 class="title" style="max-width:16ch">'+t('val_title')+'</h2><div class="vals">'+[1,2,3,4].map(i=>'<div class="val"><h3>'+t('v'+i)+'</h3><p>'+t('v'+i+'t')+'</p></div>').join('')+'</div></div></section>'+
   '<section class="sec dark"><div class="wrap"><div class="band"><div><div class="mega">10</div><h2 class="title">'+t('lt_title')+'</h2><p class="lead">'+t('lt_text')+'</p><p style="margin-top:34px"><a class="btn solid" href="#/loyalty">'+t('lt_cta')+'</a></p></div><div class="arch">'+blockPic('loyalty',0,21)+'</div></div></div></section>'+
  '</div>';
